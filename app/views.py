@@ -8,6 +8,7 @@ import datetime
 import random
 import string
 from django.core.mail import send_mail
+from project import settings
 
 #VIEW FOR LOGIN PAGE
 def login(request):
@@ -160,12 +161,12 @@ def registerstudent(request):
             login.verified = False
             login.save()
 
-            # send_mail(
-            #     'Your QuickLynx Verification Code',
-            #     login.verification_string,
-            #     'janalbertsobreo@gmail.com',
-            #     [login.email]
-            # )
+            send_mail(
+                'Your QuickLynx Verification Code',
+                login.verification_string,
+                settings.EMAIL_HOST_USER,
+                [login.email]
+            )
 
             account = Account()
             

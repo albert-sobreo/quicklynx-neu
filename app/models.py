@@ -53,11 +53,11 @@ class Classroom(models.Model):
     days = models.CharField(max_length=10)
     date_start = models.DateField(null=True)
     date_end = models.DateField(null=True)
-    year_start = models.CharField(max_length=4)
-    year_end = models.CharField(max_length=4)
+    year_start = models.CharField(max_length=4, null=True, blank=True)
+    year_end = models.CharField(max_length=4, null=True, blank=True)
     semester = models.CharField(max_length=25, choices=semester_choices, default="1st Semester")
-    headerpix = models.CharField(max_length=10, null=True)
-    invite_token = models.CharField(max_length=20, null=True)
+    headerpix = models.ImageField(upload_to="media", blank=True, null=True)
+    invite_token = models.CharField(max_length=20, null=True, blank=True)
 
     class Meta:
         db_table = "Classroom"

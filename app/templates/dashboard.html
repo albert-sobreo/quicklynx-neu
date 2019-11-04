@@ -130,19 +130,81 @@
                     {%if account.account.login.category == "PROFESSOR"%}
                         <div class="row text-center" style="height: 39px; background: rgb(222, 226,230)">
                             <div class="col">
-                                <button class="btn btn-warning">Create Classroom</button>
+                                <button class="btn btn-warning" data-toggle="modal" data-target="#myModal">Create Classroom</button>
                             </div>
                         </div>
                     {%endif%}
                     {%for classroom in account.classroom.all%}
                         <div class="row">
-                            <div class="card-selector col text-center row-course" style="background: {{classroom.headerpix}}" onclick="location.href='/classroom/{{classroom.room_name}}'">
+                            {% if classroom.headerpix|length == 0%}
+                                <div class="card-selector col text-center row-course" style="color: white; background: rgb(10, 0, 81);" onclick="location.href='/classroom/{{classroom.room_name}}'">
+                            {%endif%}
+                            {% if classroom.headerpix|length > 0 %}
+                                <div class="card-selector col text-center row-course" style="color: white; background: url({{classroom.headerpix.url}}); background-size: cover; background-position:center" onclick="location.href='/classroom/{{classroom.room_name}}'">
+                            {%endif%}
                                 <p>{{classroom.room_name}} <br><span style="font-size: 1rem; font-weight: lighter">{{classroom.date_start|date:"M d"}} - {{classroom.date_end|date:"M d Y"}} {{classroom.days}}</span></p>
                                 
                             </div>
                         </div>
                     {%endfor%}
                     
+                </div>
+                <!-- MODAL HERE -->
+                <div class="modal" id="myModal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+
+                            <!-- MODAL HEADER -->
+                            <div class="modal-header">
+                                <h4 class="modal-title">Create Classroom</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            
+                            <!-- MODAL BODY -->
+                            <div class="modal-body">
+                                <form action="#" class="form-group">{%csrf_token%}
+                                    <div class="form-group">
+                                        <input type="text" placeholder="Classroom Name" name="room_name" class="form-control form-control-sm" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="time_start">Time Start</label>
+                                        <input type="time" name="time_start" id="time_start" class="form-control form-control-sm" required>
+                                        <label for="time_end">Time End</label>
+                                        <input type="time" name="time_end" id="time_end" class="form-control form-control-sm" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="days">Days</label>
+                                        <input type="text" name="days" id="days" class="form-control form-control-sm" placeholder="MTh/TF/W/S" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="date_start">Date Start</label>
+                                        <input type="date" name="date_start" id="date_start" class="form-control form-control-sm" required>
+                                        <label for="date_end">Date End</label>
+                                        <input type="date" name="date_end" id="date_end" class="form-control form-control-sm" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="year">Year</label>
+                                        <input type="text" name="year_start" id="year" class="form-control form-control-sm" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="semester">Semester</label>
+                                        <select class="form-control form-control-sm" id="semester" name="semester" required>
+                                            <option value="" style="color:#999">Choose Semester</option>
+                                            <option value="FIRST">1st Semester</option>
+                                            <option value="SECOND">2nd Semester</option>
+                                            <option value="SUMMER">Summer</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="headerpix">Header Picture (Optional)</label>
+                                        <input type="file" name="headerpix" id="headerpix" class="form-control-file">
+                                    </div>
+                                    <button type="submit" class="btn btn-info">Create</button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
                 <!-- RIGHT COLUMN -->
                 <div class="col-3 border-right border-left text-center" style="min-height: 100vh;">
