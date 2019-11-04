@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans|Fjalla+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
+    <script defer src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script defer src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.tiny.cloud/1/h7ncil8yogyrne1lyybkhxt64mn1uvf750wiac1b8randi5n/tinymce/5/tinymce.min.js"></script> 
+    <script>tinymce.init({selector:'textarea', height: "175px", menubar:true, statusbar: false, plugins: "save image media link lists fullscreen", toolbar: "styleselect | bold italic | numlist bullist | image media link | fullscreen | save"});</script>
+    <title>QuickLynx | Dashboard</title>
+    <style>
+        body{
+            margin: 0;
+        }
+        li{
+            list-style-type: none;
+        }
+        .links{
+            font-size: 25px;
+            font-weight: bolder;
+            margin: 10px 0 10px;
+        }
+        li a{
+            text-decoration: none !important;
+            color: rgb(33,37, 41);
+            transition: 0.1s;
+            outline: 0;
+        }
+        li a:hover{
+            filter: opacity(50%);
+        }
+        textarea {
+            border: 0 none white;
+            overflow: hidden;
+            padding: 0;
+            outline: none;
+            background-color: rgba(0,0,0,0);
+            width: auto;
+        }
+        textarea::placeholder{
+            font-weight: bolder;
+            color:rgb(185, 194, 206)
+        }
+        .control-img{
+            margin: 0 5px 0;
+            cursor: pointer;
+        }
+        .control-img:hover{
+            filter: opacity(50%)
+        }
+        .form-control:focus{
+            border-color: #cccccc;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+        }
+        .aligner {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        
+        .aligner-item {
+          max-width: 50%;
+        }
+        
+        .aligner-item-top {
+          align-self: flex-start;
+        }
+        
+        .aligner-item-bottom {
+          align-self: flex-end;
+        }
+    </style>
+</head>
+<body onload="init()">
+    <div class="container-fluid">
+        <div class="container">
+            <div class="row">
+                <!-- LEFT COLUMN -->
+                <div class="col-3 border-right border-left" style="min-height: 100vh;">
+                    <!-- LOGO -->
+                    <div class="row border-bottom text-center" style="min-height: 75px; background: rgb(10, 0, 81); color: white">
+                        <div class="col">
+                            <h1 style="margin-top: 10px;">QuickLynx</h1>
+                        </div>
+                    </div>
+                    <!-- BUTTONS -->
+                    <div class="row sticky-top">
+                        <div class="container border-bottom" style="padding: 20px;">
+                            <div class="row">
+                                <ul>
+                                    <li class="links"><a href="/home/">Home</a></li>
+                                    <li class="links"><a href="/dashboard/">Dashboard</a></li>
+                                    <li class="links"><a href="#">Messages</a></li>
+                                    <li class="links"><a href="#">Notifications</a></li>
+                                    <li class="links"><a href="#">Video Calls</a></li>
+                                    <li class="links"><a href="/logout/">Log Out</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="container border-top" style="padding: 20px;">
+                            <!-- <div class="row">
+                                <ul>
+                                    <li class="links"><a href="#">Materials</a></li>
+                                    <li class="links"><a href="#">Attendance</a></li>
+                                    <li class="links"><a href="#">Grades</a></li>
+                                    <li class="links"><a href="#">Members</a></li>
+                                </ul>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+                <!-- MIDDLE COLUMN -->
+                <div class="col-6 border-right border-left" style="min-height: 100vh;">
+                    <!-- HEADER -->
+                    <div class="row border-bottom" style="min-height: 75px; background: rgb(10, 0, 81); color: white">
+                        <div class="aligner col">
+                            <h3>Dashboard</h3>
+                            <span style="font-family: 'Fjalla One', sans-serif;">{{account.account.first_name}}<img src="https://kerrpanel.com/wp-content/uploads/2018/05/default_avatar-2.gif" alt="" style="object-fit: cover; border-radius: 5px; margin: 0 10px 0" height="50px" width="50px"></span>
+                        </div>
+                    </div>
+                    <!-- COURSES HERE -->
+                    <!-- CREATE CLASSROOM SPACE -->
+                    {%if account.account.login.category == "PROFESSOR"%}
+                        <div class="row text-center" style="height: 39px; background: rgb(222, 226,230)">
+                            <div class="col">
+                                <button class="btn btn-warning">Create Classroom</button>
+                            </div>
+                        </div>
+                    {%endif%}
+                    {%for classroom in account.classroom.all%}
+                        <div class="row">
+                            <div class="card-selector col text-center row-course" style="background: {{classroom.headerpix}}" onclick="location.href='/classroom/{{classroom.room_name}}'">
+                                <p>{{classroom.room_name}} <br><span style="font-size: 1rem; font-weight: lighter">{{classroom.date_start|date:"M d"}} - {{classroom.date_end|date:"M d Y"}} {{classroom.days}}</span></p>
+                                
+                            </div>
+                        </div>
+                    {%endfor%}
+                    
+                </div>
+                <!-- RIGHT COLUMN -->
+                <div class="col-3 border-right border-left text-center" style="min-height: 100vh;">
+                    <div class="row border-bottom sticky-top" style="min-height: 75px;">
+                        <form action="#" class="text-center">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search..">
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                </div>
+                            </div>
+                        </form>
+                        <span class="links" style="margin: 0 5px 0;font-size: 15px; align-self:flex-end">Upcoming <i class="control-img far fa-calendar" title="Create Event"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var observe;
+        if (window.attachEvent) {
+            observe = function (element, event, handler) {
+                element.attachEvent('on'+event, handler);
+            };
+        }
+        else {
+            observe = function (element, event, handler) {
+                element.addEventListener(event, handler, false);
+            };
+        }
+        function init () {
+            var text = document.getElementById('text');
+            function resize () {
+                text.style.height = 'auto';
+                text.style.height = text.scrollHeight+'px';
+            }
+            /* 0-timeout to get the already changed text */
+            function delayedResize () {
+                window.setTimeout(resize, 0);
+            }
+            observe(text, 'change',  resize);
+            observe(text, 'cut',     delayedResize);
+            observe(text, 'paste',   delayedResize);
+            observe(text, 'drop',    delayedResize);
+            observe(text, 'keydown', delayedResize);
+            
+            resize();
+        }
+    </script>
+</body>
+</html>

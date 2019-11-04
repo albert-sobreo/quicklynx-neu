@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans|Fjalla+One&display=swap" rel="stylesheet"> 
+    <script defer src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script defer src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <title>QuickLynx | Verification</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 10px;
+            background: rgb(234, 237, 240);
+        }
+        div h6{
+            position: absolute;
+            bottom: 30px
+        }
+        .any-code{
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="container set-up-card any-code">
+            <div class="row">
+                
+                <h3>Enter Verification Code</h3> <div style="display: none;" id="thestringishere">{{account.account.login.verification_string}}</div>
+            </div>
+            <form action="#" method="POST">{%csrf_token%}
+                <div class="form-group">
+                    <input type="text" class="form-control" id="vericode" name="vericode" required>
+                </div>
+                <button type="button" class="btn btn-info" onclick="verify()">Verify</button>
+            </form>
+            <div class="row" >
+                <h6 style="font-weight:lighter; font-size: 12px;">If you didn't receive any code, <a href="#">click here</a> to receive a new one.</h6>
+            </div>
+
+        </div>
+        <footer class="page-footer font-small text-center" style="position: fixed; bottom: 0; left:45%; font-size: 10px;font-family: 'Fjalla One', sans-serif">
+            <div class="footer-copyright text-center py-3">
+                © 2019 Copyright: QuickLynx
+            </div>
+        </footer>
+    </div>
+    <script>
+        function verify(){
+            var codehere = document.getElementById('vericode').value;
+            var codethere= document.getElementById('thestringishere').innerHTML
+            if(codehere==codethere){
+                alert("You are verified")
+                window.location = '/makeverifications/'
+            }
+            else{
+                alert("Verification Code mismatched")
+            }
+        }
+    </script>
+</body>
+</html>

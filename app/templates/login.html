@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans|Fjalla+One&display=swap" rel="stylesheet"> 
+    <script defer src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script defer src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <title>QuickLynx | Log In</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 10px;
+            background: rgb(234, 237, 240);
+        }
+        .loginbox{
+            border-radius: 5px;
+            border: rgb(207, 207, 207) 1px solid;
+            padding: 10px;
+            margin: auto;
+            background: white;
+            box-shadow: 0 0 50px 5px rgba(0,0,0,0.2);
+        }
+        .title{
+            font-family: 'Fjalla One', sans-serif
+        }
+        h3{
+            font-family: 'Fjalla One', sans-serif
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="loginbox">
+            <div class="container" style="padding: 0 200px 0">
+                <div class="row">
+                    <div class="col">
+                        <h3 style="font-weight: bolder;">Log in</h3>
+                        <form action="">
+                            <div class="form-group">
+                                <input type="email" class="form-control form-control-sm my-3" id="email" placeholder="Enter email" name="email" required>
+                                <input type="password" class="form-control form-control-sm my-3" id="password" placeholder="Enter password" name="password" required>
+                                <button type="submit" class="btn btn-info my-3">Log in</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col">
+                        <div class="row title">
+                            <h1 style="font-weight: 900;">QuickLynx</h1>
+                            <h2 style="font-weight: 700;">Your classroom in the cloud</h2>
+                        </div>
+                        <div class="row" style="font-weight: bold">
+                                Get started as:
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <button class="btn btn-warning mx-1">Professor</button>
+                                <button class="btn btn-warning mx-1">Student</button>
+                                <button class="btn btn-warning mx-1">Administrator</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="page-footer font-small text-center" style="position: fixed; bottom: 0; left:45%; font-size: 10px;font-family: 'Fjalla One', sans-serif">
+            <div class="footer-copyright text-center py-3">
+                © 2019 Copyright: QuickLynx
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

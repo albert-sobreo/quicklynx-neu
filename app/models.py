@@ -1,0 +1,145 @@
+from django.db import models
+from datetime import date
+import os
+
+# Create your models here.
+category_choices = {
+    ("STUDENT", "Student"),
+    ("ADMIN", "Admin"),
+    ("PROFESSOR", "Professor")
+}
+
+semester_choices = {
+    ("FIRST", "1st Semester"),
+    ("SECOND", "2nd Semeseter"),
+    ("SUMMER", "Summer")
+}
+
+
+class Login(models.Model):
+    email = models.EmailField(max_length=50)
+    password = models.CharField(max_length=255)
+    category = models.CharField(max_length=50)
+    verification_string = models.CharField(max_length=10, blank=True, null=True)
+    verified = models.BooleanField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'login'
+
+    def __str__(self):
+        return self.email
+
+
+class Account(models.Model):
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50, blank=True, null=True)
+    school_id = models.CharField(max_length=50)
+    propix = models.ImageField(upload_to='pictures', blank=True, null=True)
+    login = models.ForeignKey(Login, on_delete=models.CASCADE)
+    # add noti_isChecked
+    #add msgs_isChecked
+
+    class Meta:
+        db_table = 'account'
+
+    def __str__(self):
+        return self.last_name + ", " + self.first_name
+
+
+class Classroom(models.Model):
+    room_name = models.CharField(max_length=50)
+    time_start = models.TimeField(null=True)
+    time_end = models.TimeField(null=True)
+    days = models.CharField(max_length=10)
+    date_start = models.DateField(null=True)
+    date_end = models.DateField(null=True)
+    year_start = models.CharField(max_length=4)
+    year_end = models.CharField(max_length=4)
+    semester = models.CharField(max_length=25, choices=semester_choices, default="1st Semester")
+    headerpix = models.CharField(max_length=10, null=True)
+    invite_token = models.CharField(max_length=20, null=True)
+
+    class Meta:
+        db_table = "Classroom"
+
+    def __str__(self):
+        return self.room_name + "S.Y. " + self.year_start + "-" + self.year_end + self.semester
+
+
+class Professor(models.Model):
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True, null=True)
+    classroom = models.ManyToManyField(Classroom, blank=True)
+
+    class Meta:
+        db_table = "professor"
+
+    def __str__(self):
+        return self.account.last_name + ", " + self.account.first_name
+
+
+class Student(models.Model):
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True, null=True)
+    classroom = models.ManyToManyField(Classroom, blank=True)
+
+    class Meta:
+        db_table = "student"
+
+    def __str__(self):
+        return self.account.last_name + ", " + self.account.first_name
+
+
+class Post(models.Model):
+    text = models.CharField(max_length=1024, blank=True, null=True)
+    date = models.DateTimeField()
+    upvotes = models.IntegerField(default=0)
+    downvotes = models.IntegerField(default=0)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'post'
+
+    def __str__(self):
+        return str(self.date)
+
+
+class Lecture(models.Model):
+    fileloc = models.FileField(upload_to='media', blank=True, null=True) #add validators
+    date = models.DateTimeField()
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'lecture'
+
+    def __str__(self):
+        name, extension = os.path.splitext(self.fileloc.name)
+        return name
+
+
+class Event(models.Model):
+    title = models.CharField(max_length=50)
+    date = models.DateField()
+    description = models.CharField(max_length=500, blank=True, null=True)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE)
+    color = models.CharField(max_length=10)
+
+    class Meta:
+        db_table = 'event'
+
+    def __str__(self):
+        return self.title
+
+
+class Message(models.Model):
+    messege = models.CharField(max_length=512)
+    date = models.DateTimeField()
+    messagetoandfrom = models.ManyToManyField(Account, blank=True)
+
+    class Meta:
+        db_table = 'message'
+
+    def __str__(self):
+        return self.date
+

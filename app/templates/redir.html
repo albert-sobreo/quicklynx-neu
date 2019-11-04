@@ -1,0 +1,7 @@
+{%if request.session.start%}
+    <html>
+    <body>
+    <script>window.location.href = "{%url 'home'%}"</script>
+    </body>
+    </html>
+{%endif%}

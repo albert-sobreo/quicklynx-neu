@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans|Fjalla+One&display=swap" rel="stylesheet"> 
+    <script defer src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script defer src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <title>QuickLynx | Register - Students</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 10px;
+            background: rgb(234, 237, 240);
+        }
+        div h6{
+            position: absolute;
+            bottom: 30px
+        }
+        .any-code{
+            position: relative;
+        }
+        img{
+            height: 200px;
+            width: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="container set-up-card any-code text-center">
+            <div class="row">
+                <h3 class="text-center">Set Up Profile Picture</h3>
+            </div>
+            <form action="#">
+                <img id="blah" src="#" alt="your image">
+                <div class="form-group">
+                    <input style="margin-top: 10px" type="file" class="form-control"  id="imgInp" required>
+                </div>
+                <button type="submit" class="btn btn-info">Submit</button>
+            </form>
+        </div>
+        <footer class="page-footer font-small text-center" style="position: fixed; bottom: 0; left:45%; font-size: 10px;font-family: 'Fjalla One', sans-serif">
+            <div class="footer-copyright text-center py-3">
+                © 2019 Copyright: QuickLynx
+            </div>
+        </footer>
+    </div>
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+              var reader = new FileReader();
+              
+              reader.onload = function(e) {
+                $('#blah').attr('src', e.target.result);
+              }
+              
+              reader.readAsDataURL(input.files[0]);
+            }
+          }
+          
+          $("#imgInp").change(function() {
+            readURL(this);
+          });
+    </script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+
+.loginbox{
+    border-radius: 5px;
+    border: rgb(207, 207, 207) 1px solid;
+    padding: 10px 200px 10px;
+    margin: auto;
+    background: white
+}
+.title{
+    font-family: 'Fjalla One', sans-serif
+}
+h3, h6, h1{
+    font-family: 'Fjalla One', sans-serif;
+    font-weight: bolder;
+}
+.register-card, .set-up-card{
+    border-radius: 5px;
+    padding: 40px 80px 40px;
+    background: white;
+    border: rgb(207, 207, 207) 1px solid;
+    box-shadow: 0 0 50px 5px rgba(0,0,0,0.2);
+}
+.register-card{
+    height: 600px;
+    width: 500px;
+}
+.set-up-card{
+    width: 500px;
+    height: 500px;
+}
+input{
+    border:rgb(212, 212, 212) 1px solid !important;
+    border-radius: 2px !important;
+}
+.card-selector{
+    margin: 20px 20px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    transition: all 0.2s ease-in-out;
+    color: black;
+    padding-top: 10px;
+    cursor: pointer;
+}
+.card-selector p{
+    font-size: xx-large;
+    font-weight: 700;
+}
+.row-course{
+    margin-bottom: 0;
+}
+.small-size{
+    font-size: .7rem;
+    color: #999
+}
+.fa-arrow-up, .fa-arrow-down{
+    filter: invert();
+    cursor: pointer;
+}

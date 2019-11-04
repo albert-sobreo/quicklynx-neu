@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans|Fjalla+One&display=swap" rel="stylesheet"> 
+    <script defer src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script defer src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <title>QuickLynx | Register - Students</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 10px;
+            background: rgb(234, 237, 240);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="container register-card">
+            <div class="row">
+                <h3>Register to QuickLynx</h3>
+            </div>
+            <div class="row">
+                <h6>for students</h6>
+            </div>
+            <form action="/registerstudent/" method="POST">{%csrf_token%}
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="First Name" id="fname" name="first_name" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Last Name" id="lname" name="last_name" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="School ID" id="studid" name="school_id" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" class="form-control" placeholder="Email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="Password" id="pass" name="password" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="Validate Password" id="vpass" name="vpass" required>
+                </div>
+                <button class="btn btn-warning">Register</button>
+            </form>
+        </div>
+        <footer class="page-footer font-small text-center" style="position: fixed; bottom: 0; left:45%; font-size: 10px;font-family: 'Fjalla One', sans-serif">
+            <div class="footer-copyright text-center py-3">
+                © 2019 Copyright: QuickLynx
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
