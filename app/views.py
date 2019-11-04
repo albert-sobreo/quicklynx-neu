@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect
-from app.forms import aForm, aFormfromhome, LoginForm, RegisterForm
+from app.forms import aForm, aFormfromhome, LoginForm, RegisterForm, ClassroomForm
 from app.models import Classroom, Professor, Student, Post, Lecture, Event, Message, Login, Account
 from passlib.hash import pbkdf2_sha256
 from django.contrib.auth import logout
@@ -289,6 +289,51 @@ def classroom(request, room_name):
             }
 
     return render(request, 'classroom.html', context)
+
+#PROCESS FOR CREATING ROOMS
+def makeclassroom(request):
+    email = request.session.get('email')
+    category = request.session.get('category')
+    if category == 'STUDENT':
+        acct = Student.objects.select_related().get(account__login__email=email)
+    elif category == 'PROFESSOR':
+        acct = Professor.objects.select_related().get(account__login__email=email)
+
+    MyRoomForm = ClassroomForm(request.POST, request.FILES)
+    if request.method == "POST":
+        if MyRoomForm.is_valid():
+            room_name = MyRoomForm.cleaned_data['room_name']
+            time_start= MyRoomForm.cleaned_data['time_start']
+            time_end =  MyRoomForm.cleaned_data['time_end']
+            days     =  MyRoomForm.cleaned_data['days']
+            date_start= MyRoomForm.cleaned_data['date_start']
+            date_end =  MyRoomForm.cleaned_data['date_end']
+            year_start= MyRoomForm.cleaned_data['year_start']
+            semester =  MyRoomForm.cleaned_data['semester']
+            headerpix = MyRoomForm.cleaned_data['headerpix']
+
+            classroom = Classroom()
+
+            classroom.room_name = room_name
+            classroom.time_start = time_start
+            classroom.time_end = time_end
+            classroom.days = days
+            classroom.date_start = date_start
+            classroom.date_end = date_end
+            classroom.year_start = year_start
+            classroom.year_end = year_start
+            classroom.semester = semester
+            classroom.headerpix = headerpix
+            classroom.invite_token = randomString(20)
+            classroom.save()
+            
+            acct.classroom.add(classroom)
+        else:
+            return HttpResponse(MyRoomForm.errors)
+
+    return redirect('/classroom/'+room_name)
+
+    
 
 def makepost(request, room_name):
     email = request.session.get('email')

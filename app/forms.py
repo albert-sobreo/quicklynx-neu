@@ -11,6 +11,18 @@ class aFormfromhome(forms.Form):
     classroom = forms.CharField(max_length=50)
 
 
+class ClassroomForm(forms.Form):
+    room_name = forms.CharField(max_length=50)
+    time_start = forms.TimeField(input_formats=['%H:%M', '%I:%M%p', '%I:%M %p'])
+    time_end = forms.TimeField(input_formats=['%H:%M', '%I:%M%p', '%I:%M %p'])
+    days = forms.CharField(max_length=10)
+    date_start = forms.DateField()
+    date_end = forms.DateField()
+    year_start = forms.CharField(max_length=4)
+    semester = forms.CharField(max_length=25)
+    headerpix = forms.ImageField()
+
+
 class LoginForm(forms.Form):
     email = forms.EmailField(max_length=50)
     password = forms.CharField(widget = forms.PasswordInput())

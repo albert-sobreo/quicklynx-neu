@@ -142,7 +142,7 @@
                             {% if classroom.headerpix|length > 0 %}
                                 <div class="card-selector col text-center row-course" style="color: white; background: url({{classroom.headerpix.url}}); background-size: cover; background-position:center" onclick="location.href='/classroom/{{classroom.room_name}}'">
                             {%endif%}
-                                <p>{{classroom.room_name}} <br><span style="font-size: 1rem; font-weight: lighter">{{classroom.date_start|date:"M d"}} - {{classroom.date_end|date:"M d Y"}} {{classroom.days}}</span></p>
+                                <p style="text-shadow: 0 0 5px black;">{{classroom.room_name}} <br><span style="font-size: 1rem; font-weight: lighter">{{classroom.date_start|date:"M d"}} - {{classroom.date_end|date:"M d Y"}} {{classroom.days}}</span></p>
                                 
                             </div>
                         </div>
@@ -162,7 +162,7 @@
                             
                             <!-- MODAL BODY -->
                             <div class="modal-body">
-                                <form action="#" class="form-group">{%csrf_token%}
+                                <form action="/makeclassroom/" class="form-group" method="POST" enctype="multipart/form-data">{%csrf_token%}
                                     <div class="form-group">
                                         <input type="text" placeholder="Classroom Name" name="room_name" class="form-control form-control-sm" required>
                                     </div>

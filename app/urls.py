@@ -17,5 +17,6 @@ urlpatterns = [
     path('registerprofessor/', views.registerprofessor, name='registerprofessor'),
     path('classroom/<str:room_name>', views.classroom, name='classroom'),
     path('makepost/<str:room_name>', views.makepost, name='makepost'),
-    path('makepostfromhome/', views.makepostfromhome, name='makepostfromhome')
+    path('makepostfromhome/', views.makepostfromhome, name='makepostfromhome'),
+    path('makeclassroom/', views.makeclassroom, name='makeclassroom')
 ]
