@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect
-from app.forms import aForm, aFormfromhome, LoginForm, RegisterForm, ClassroomForm
+from app.forms import aForm, aFormfromhome, LoginForm, RegisterForm, ClassroomForm, JoinClassroomForm
 from app.models import Classroom, Professor, Student, Post, Lecture, Event, Message, Login, Account
 from passlib.hash import pbkdf2_sha256
 from django.contrib.auth import logout
@@ -9,6 +9,7 @@ import random
 import string
 from django.core.mail import send_mail
 from project import settings
+
 
 #VIEW FOR LOGIN PAGE
 def login(request):
@@ -385,3 +386,26 @@ def makepostfromhome(request):
         else:
             return HttpResponse("select a classroom")
     return redirect('/home/')
+
+#PROCESS TO JOIN ROOM
+def joinclassroom(request):
+    email = request.session.get('email')
+    category = request.session.get('category')
+    if category == 'STUDENT':
+        acct = Student.objects.select_related().get(account__login__email=email)
+    elif category == 'PROFESSOR':
+        acct = Professor.objects.select_related().get(account__login__email=email)
+
+    MyJoinForm = JoinClassroomForm(request.POST)
+    if request.method == "POST":
+        if MyJoinForm.is_valid():
+            token = MyJoinForm.cleaned_data['token']
+
+            classroom = Classroom.objects.get(invite_token=token)
+
+            acct.classroom.add(classroom)
+
+        else:
+            return HttpResponse(MyJoinForm.errors)
+    
+    return redirect('/dashboard/')

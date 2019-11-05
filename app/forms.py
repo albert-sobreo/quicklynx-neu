@@ -23,6 +23,10 @@ class ClassroomForm(forms.Form):
     headerpix = forms.ImageField()
 
 
+class JoinClassroomForm(forms.Form):
+    token = forms.CharField(max_length=50)
+
+
 class LoginForm(forms.Form):
     email = forms.EmailField(max_length=50)
     password = forms.CharField(widget = forms.PasswordInput())
