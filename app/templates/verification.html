@@ -35,6 +35,7 @@
                 <h3>Enter Verification Code</h3> <div style="display: none;" id="thestringishere">{{account.account.login.verification_string}}</div>
             </div>
             <form action="#" method="POST">{%csrf_token%}
+                <span>Check your email for verification code</span>
                 <div class="form-group">
                     <input type="text" class="form-control" id="vericode" name="vericode" required>
                 </div>
@@ -56,7 +57,7 @@
             var codehere = document.getElementById('vericode').value;
             var codethere= document.getElementById('thestringishere').innerHTML
             if(codehere==codethere){
-                alert("You are verified")
+                alert("You are verified.")
                 window.location = '/makeverifications/'
             }
             else{
