@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../static/css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Sans|Fjalla+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
-    <script defer src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script defer src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.tiny.cloud/1/h7ncil8yogyrne1lyybkhxt64mn1uvf750wiac1b8randi5n/tinymce/5/tinymce.min.js"></script> 
@@ -75,6 +75,9 @@
         
         .aligner-item-bottom {
           align-self: flex-end;
+        }
+        .upvotedownvote{
+            padding: 0;
         }
     </style>
 </head>
@@ -148,8 +151,32 @@
                         {%if post.classroom in account.classroom.all%}
                             {%if post.classroom|stringformat:'s' == classroom|stringformat:'s'%}
                                 {%if classroom|stringformat:'s' in account.classroom.all|stringformat:'s'%}
-                                    <div class="row">
-                                        {{post.text|safe}}
+                                    <div class="row border-top border-bottom">
+                                        <div class="col-1 text-center upvotedownvote" >
+                                            <div id="refreshup{{post.id}}" class="" onclick=upvote({{post.id}})>{%if post in account.upvoted_post.all%}<i class="fas fa-sort-up" style="color:rgb(109, 52, 109)"></i>{%else%}<i class="fas fa-sort-up"></i>{%endif%}</div>
+                                            <div id="nums{{post.id}}"class="">{{post.upvotes|add:post.downvotes}}</div>
+                                            <div id="refreshdown{{post.id}}" class="" onclick=downvote({{post.id}})>{%if post in account.downvoted_post.all%}<i class="fas fa-sort-down" style="color: rgb(56, 121, 121);"></i>{%else%}<i class="fas fa-sort-down"></i>{%endif%}</div>
+                                        </div>
+                                        <div class="">
+                                            <div class="row">
+                                                <div class="col-1">
+                                                    {%if post.account.propix|length == 0 %}
+                                                        <img src="https://kerrpanel.com/wp-content/uploads/2018/05/default_avatar-2.gif" alt="" height="25px" width="25px" style="object-fit: cover; margin: 0; border-radius: 50%;">
+                                                    {%endif%}
+                                                    {%if post.account.propix|length > 0 %}
+                                                        <img src="{{post.account.propix.url}}" alt="" height="25px" width="25px" style="object-fit: cover; margin: 0; border-radius: 50%;">
+                                                    {%endif%}
+                                                </div>
+                                                <div class="col">
+                                                    <span style="font-weight: bold;">{{post.classroom.room_name}}</span>&nbsp;<i class="fas fa-angle-right" style="vertical-align:middle;"></i><span class="small-size">&nbsp;{{post.account}}&nbsp;{{post.date|timesince}} ago</span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col" style="padding:5px 50px 0px">
+                                                    {{post.text|safe}}
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 {%endif%}
                             {%endif%}
@@ -202,6 +229,25 @@
             observe(text, 'keydown', delayedResize);
             
             resize();
+        }
+    </script>
+    <script>
+        function upvote(post_id){
+            $.ajax({
+                url: "/upvote/"+post_id,
+                dataType: 'json'
+            })
+            $("#refreshup"+post_id).load(location.href + " #refreshup"+post_id)
+            $("#nums"+post_id).load(location.href + " #nums"+post_id)
+        }
+
+        function downvote(post_id){
+            $.ajax({
+                url: "/downvote/"+post_id,
+                dataType: 'json'
+            })
+            $("#refreshdown"+post_id).load(location.href + " #refreshdown"+post_id)
+            $("#nums"+post_id).load(location.href + " #nums"+post_id)
         }
     </script>
 </body>

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="../static/css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Fira+Sans|Fjalla+One&display=swap" rel="stylesheet"> 
-    <script defer src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script defer src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <title>QuickLynx | Register - Professors</title>
@@ -47,8 +47,10 @@
                 </div>
                 <div class="form-group">
                     <input type="password" class="form-control" placeholder="Validate Password" id="vpass" name="vpass" required>
+                    <span class="text-danger" id="passmismatch" style="display: none;">Password doesn't match</span>
+                    <span class="text-success" id="passmatch" style="display: none;">Password matched</span>
                 </div>
-                <button class="btn btn-warning">Register</button>
+                <button class="btn btn-warning" id="bttn">Register</button>
             </form>
         </div>
         <footer class="page-footer font-small text-center" style="position: fixed; bottom: 0; left:45%; font-size: 10px;font-family: 'Fjalla One', sans-serif">
@@ -57,5 +59,24 @@
             </div>
         </footer>
     </div>
+    <script>
+        $("#pass, #vpass").on("keyup", function(){
+            $("#bttn").prop("disabled", true)
+            var passw = $("#pass").val()
+            var vpass = $("#vpass").val()
+
+             if(Number(passw) == Number(vpass)){
+                 console.log('hwat')
+                 $("#bttn").prop('disabled', false)
+                 $("#passmatch").css("display", "inline")
+                 $("#passmismatch").css("display", "none")
+             }
+             else{
+                 $("#passmismatch").css("display", "inline")
+                 $("#passmatch").css("display", "none")
+                 $("#bttn").prop("disabled", true)
+             }
+        })
+    </script>
 </body>
 </html>

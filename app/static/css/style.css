@@ -54,7 +54,7 @@ input{
     font-size: .7rem;
     color: #999
 }
-.fa-arrow-up, .fa-arrow-down{
+.fa-sort-up, .fa-sort-down{
     filter: invert();
     cursor: pointer;
 }
