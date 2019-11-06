@@ -19,5 +19,7 @@ urlpatterns = [
     path('makepost/<str:room_name>', views.makepost, name='makepost'),
     path('makepostfromhome/', views.makepostfromhome, name='makepostfromhome'),
     path('makeclassroom/', views.makeclassroom, name='makeclassroom'),
-    path('joinclassroom/', views.joinclassroom, name='joinclassroom')
+    path('joinclassroom/', views.joinclassroom, name='joinclassroom'),
+    path('upvote/<str:post_id>', views.upvote, name='upvote'),
+    path('downvote/<str:post_id>',views.downvote, name='downvote')
 ]

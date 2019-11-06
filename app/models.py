@@ -66,30 +66,8 @@ class Classroom(models.Model):
         return self.room_name + "S.Y. " + self.year_start + "-" + self.year_end + self.semester
 
 
-class Professor(models.Model):
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True, null=True)
-    classroom = models.ManyToManyField(Classroom, blank=True)
-
-    class Meta:
-        db_table = "professor"
-
-    def __str__(self):
-        return self.account.last_name + ", " + self.account.first_name
-
-
-class Student(models.Model):
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True, null=True)
-    classroom = models.ManyToManyField(Classroom, blank=True)
-
-    class Meta:
-        db_table = "student"
-
-    def __str__(self):
-        return self.account.last_name + ", " + self.account.first_name
-
-
 class Post(models.Model):
-    text = models.CharField(max_length=1024, blank=True, null=True)
+    text = models.CharField(max_length=100000, blank=True, null=True)
     date = models.DateTimeField()
     upvotes = models.IntegerField(default=0)
     downvotes = models.IntegerField(default=0)
@@ -101,6 +79,32 @@ class Post(models.Model):
 
     def __str__(self):
         return str(self.date)
+
+
+class Professor(models.Model):
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True, null=True)
+    classroom = models.ManyToManyField(Classroom, blank=True)
+    upvoted_post = models.ManyToManyField(Post, blank=True, related_name='upvoted_post_prof')
+    downvoted_post = models.ManyToManyField(Post, blank=True, related_name='downvoted_post_prof')
+
+    class Meta:
+        db_table = "professor"
+
+    def __str__(self):
+        return self.account.last_name + ", " + self.account.first_name
+
+
+class Student(models.Model):
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True, null=True)
+    classroom = models.ManyToManyField(Classroom, blank=True)
+    upvoted_post = models.ManyToManyField(Post, blank=True, related_name='upvoted_post_stud')
+    downvoted_post = models.ManyToManyField(Post, blank=True, related_name='downvoted_post_stud')
+
+    class Meta:
+        db_table = "student"
+
+    def __str__(self):
+        return self.account.last_name + ", " + self.account.first_name
 
 
 class Lecture(models.Model):

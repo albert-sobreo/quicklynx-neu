@@ -1,4 +1,5 @@
-from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect
+from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect, render_to_response
+from django.http import JsonResponse
 from app.forms import aForm, aFormfromhome, LoginForm, RegisterForm, ClassroomForm, JoinClassroomForm
 from app.models import Classroom, Professor, Student, Post, Lecture, Event, Message, Login, Account
 from passlib.hash import pbkdf2_sha256
@@ -409,3 +410,72 @@ def joinclassroom(request):
             return HttpResponse(MyJoinForm.errors)
     
     return redirect('/dashboard/')
+
+#UPVOTE
+def upvote(request, post_id):
+    email = request.session.get('email')
+    category = request.session.get('category')
+    if category == 'STUDENT':
+        acct = Student.objects.select_related().get(account__login__email=email)
+    elif category == 'PROFESSOR':
+        acct = Professor.objects.select_related().get(account__login__email=email)
+
+    post = Post.objects.get(id=post_id)
+    if post not in acct.upvoted_post.all():
+        acct.upvoted_post.add(post)
+        post.upvotes += 1
+        post.save()
+    
+    else:
+        acct.upvoted_post.remove(post)
+        post.upvotes -= 1
+        post.save()
+    if category == "STUDENT":
+        context = {
+            'posts': Post.objects.all(),
+            'events': Event.objects.all(),
+            'account': Student.objects.select_related().get(account__login__email=email),
+            'students': Student.objects.all()
+        }
+    elif category == "PROFESSOR":
+            context = {
+                'posts': Post.objects.all(),
+                'events': Event.objects.all(),
+                'account': Professor.objects.select_related().get(account__login__email=email),
+                'students': Student.objects.all()
+            }
+    return JsonResponse(context)
+
+def downvote(request, post_id):
+    email = request.session.get('email')
+    category = request.session.get('category')
+    if category == 'STUDENT':
+        acct = Student.objects.select_related().get(account__login__email=email)
+    elif category == 'PROFESSOR':
+        acct = Professor.objects.select_related().get(account__login__email=email)
+
+    post = Post.objects.get(id=post_id)
+    if post not in acct.downvoted_post.all():
+        acct.downvoted_post.add(post)
+        post.downvotes -= 1
+        post.save()
+    
+    else:
+        acct.downvoted_post.remove(post)
+        post.downvotes += 1
+        post.save()
+    if category == "STUDENT":
+        context = {
+            'posts': Post.objects.all(),
+            'events': Event.objects.all(),
+            'account': Student.objects.select_related().get(account__login__email=email),
+            'students': Student.objects.all()
+        }
+    elif category == "PROFESSOR":
+            context = {
+                'posts': Post.objects.all(),
+                'events': Event.objects.all(),
+                'account': Professor.objects.select_related().get(account__login__email=email),
+                'students': Student.objects.all()
+            }
+    return JsonResponse(context)
