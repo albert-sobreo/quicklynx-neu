@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="../static/css/style.css">
@@ -110,6 +110,8 @@
                         <div class="container border-top" style="padding: 20px;">
                             <div class="row">
                                 <ul>
+                                    all of these pages must be within the same page
+                                    <li class="links"><a href="/classroom/{{classroom.room_name}}">Posts</a></li>
                                     <li class="links"><a href="#">Materials</a></li>
                                     <li class="links"><a href="#">Attendance</a></li>
                                     <li class="links"><a href="#">Grades</a></li>
@@ -129,8 +131,15 @@
                         <div class="row border-bottom" style="min-height: 75px; background: url({{classroom.headerpix.url}}); color: white; background-size: cover; background-position: center">
                     {%endif%}
                         <div class="aligner col">
-                            <h3>{{classroom.room_name}}</h3>
-                            <span style="font-family: 'Fjalla One', sans-serif;">{{account.account.first_name}}<img src="https://kerrpanel.com/wp-content/uploads/2018/05/default_avatar-2.gif" alt="" style="object-fit: cover; border-radius: 5px; margin: 0 10px 0" height="50px" width="50px"></span>
+                            <h3 style="text-shadow: 0 0 5px black;">{{classroom.room_name}}</h3>
+                            <span style="font-family: 'Fjalla One', sans-serif; text-shadow: 0 0 5px black">{{account.account.first_name}}
+                                {%if account.account.propix|length == 0 %}
+                                    <img src="https://kerrpanel.com/wp-content/uploads/2018/05/default_avatar-2.gif" alt="" style="object-fit: cover; border-radius: 5px; margin: 0 10px 0" height="50px" width="50px">
+                                {%endif%}
+                                {%if account.account.propix|length > 0 %}
+                                    <img src="{{account.account.propix.url}}" alt="" style="object-fit: cover; border-radius: 5px; margin: 0 10px 0" height="50px" width="50px">
+                                {%endif%}
+                            </span>
                         </div>
                     </div>
                     <!-- TEXT AREA -->
@@ -153,7 +162,7 @@
                                 {%if classroom|stringformat:'s' in account.classroom.all|stringformat:'s'%}
                                     <div class="row border-top border-bottom">
                                         <div class="col-1 text-center upvotedownvote" >
-                                            <div id="refreshup{{post.id}}" class="" onclick=upvote({{post.id}})>{%if post in account.upvoted_post.all%}<i class="fas fa-sort-up" style="color:rgb(109, 52, 109)"></i>{%else%}<i class="fas fa-sort-up"></i>{%endif%}</div>
+                                            <div id="refreshup{{post.id}}" class="" onclick=upvote({{post.id}})>{%if post in account.upvoted_post.all%}<i class="fas fa-sort-up" style="color:rgb(184, 75, 184)"></i>{%else%}<i class="fas fa-sort-up"></i>{%endif%}</div>
                                             <div id="nums{{post.id}}"class="">{{post.upvotes|add:post.downvotes}}</div>
                                             <div id="refreshdown{{post.id}}" class="" onclick=downvote({{post.id}})>{%if post in account.downvoted_post.all%}<i class="fas fa-sort-down" style="color: rgb(56, 121, 121);"></i>{%else%}<i class="fas fa-sort-down"></i>{%endif%}</div>
                                         </div>

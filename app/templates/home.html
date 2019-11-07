@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="../static/css/style.css">
@@ -161,7 +161,7 @@
                         {%if post.classroom in account.classroom.all%}
                             <div class="row border-top border-bottom">
                                 <div class="col-1 text-center upvotedownvote" >
-                                    <div id="refreshup{{post.id}}" class="" onclick=upvote({{post.id}})>{%if post in account.upvoted_post.all%}<i class="fas fa-sort-up" style="color:rgb(109, 52, 109)"></i>{%else%}<i class="fas fa-sort-up"></i>{%endif%}</div>
+                                    <div id="refreshup{{post.id}}" class="" onclick=upvote({{post.id}})>{%if post in account.upvoted_post.all%}<i class="fas fa-sort-up" style="color:rgb(184, 75, 184)"></i>{%else%}<i class="fas fa-sort-up"></i>{%endif%}</div>
                                     <div id="nums{{post.id}}"class="">{{post.upvotes|add:post.downvotes}}</div>
                                     <div id="refreshdown{{post.id}}" class="" onclick=downvote({{post.id}})>{%if post in account.downvoted_post.all%}<i class="fas fa-sort-down" style="color: rgb(56, 121, 121);"></i>{%else%}<i class="fas fa-sort-down"></i>{%endif%}</div>
                                 </div>
