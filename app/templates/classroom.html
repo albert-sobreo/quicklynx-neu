@@ -1,3 +1,4 @@
+{% load filename %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -247,7 +248,7 @@
                     </div>
                     <!-- TEXT AREA -->
                     <!-- POST TAB -->
-                    <div class="MIDDLEPOST" id="MIDDLEPOST" style="display: none;">
+                    <div class="MIDDLEPOST" id="MIDDLEPOST" style="display: display;">
                         <form action="/makepost/{{classroom.room_name}}" method="POST">
                             {%csrf_token%}
                             <textarea rows="1" cols="auto" style="height:1em;" id="text" class="col" placeholder="Create Post" name="text"></textarea>
@@ -282,7 +283,7 @@
                                                         {%endif%}
                                                     </div>
                                                     <div class="col">
-                                                        <span style="font-weight: bold;">{{post.classroom.room_name}}</span>&nbsp;<i class="fas fa-angle-right" style="vertical-align:middle;"></i><span class="small-size">&nbsp;{{post.account}}&nbsp;{{post.date|timesince}} ago</span>
+                                                        <span style="font-weight: bold;">{{post.account}}</span>&nbsp;<i class="fas fa-angle-right" style="vertical-align:middle;"></i><span class="small-size">&nbsp;&nbsp;{{post.date|timesince}} ago</span>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -300,26 +301,62 @@
                     <!-- END OF POST TAB -->
 
                     <!-- MATERIALS TAB -->
-                    <div class="MIDDLEMATERIALS" id="MIDDLEMATERIALS" style="display: block">
+                    <div class="MIDDLEMATERIALS" id="MIDDLEMATERIALS" style="display: none">
                         <div class="row text-center border-bottom select-buttons-materials">
-                            <div class="col" style="cursor: pointer;">Lectures</div>
-                            <div class="col border-right border-left" style="cursor: pointer;">Assignments</div>
-                            <div class="col" style="cursor: pointer;">Quizzes</div>
+                            <div class="col" style="cursor: pointer; color: rgb(63, 150, 201);">Lectures</div>
+                            <div class="col border-right border-left" style="cursor: pointer; color: rgb(144, 47, 201);">Assignments</div>
+                            <div class="col" style="cursor: pointer; color: rgb(218, 81, 81);">Quizzes</div>
                         </div>
-                        <!-- Lectures -->
+                        <!-- Lecture button -->
                         <div class="row">
-                            <button class="btn btn-success col" style="border-radius: 0; margin-bottom: 20px">Upload a Lecture</button>
+                            <button class="btn btn-success col" style="border-radius: 0; margin-bottom: 20px" type="button" data-toggle="modal" data-target="#addlecture">Upload a Lecture</button>
                         </div>
-                        <div class="row border-top border-bottom">
+                        <!-- ADD LECTURE MODAL -->
+                        <div class="modal" id="addlecture" style="color: black">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Add Lecture</h4>
+                                        <button class="close" type="button" data-dismiss="modal">&times;</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="/addlecture/{{classroom.room_name}}" method="POST" enctype="multipart/form-data">{%csrf_token%}
+                                            <div class="form-group">
+                                                <label for="lectureno">Lecture No.</label>
+                                                <input type="text" id="lectureno" name="no" class="form-control form-control-sm">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="lectitle">Lecture Title</label>
+                                                <input type="text" id="lectitle" name="title" class="form-control form-control-sm">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="file">File</label>
+                                                <input type="file" id="file" name="file_loc" class="form-control-file">
+                                            </div>
+                                            <button type="submit" class="btn btn-info">Add</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- ADD LECTURE MODAL END -->
+                        <!-- button end -->
+                        <!-- LECTURE MAIN -->
+                        {%for lecture in lectures|dictsort:"no"%}
+                        {%if classroom|stringformat:"s" == lecture.classroom|stringformat:"s"%}
+                        <div class="row border-top border-bottom" onclick="location.href='/download/{{lecture.file_loc|filename}}'" style="cursor: pointer;">
                             <div class="col-1 border-right aligner ">
                                 <i class="fas fa-book-open" style="color: rgb(164, 211, 207);" class="aligner-item"></i>
                             </div>
                             <div class="col-11">
-                                <span style="font-weight: bold;">LECTURE NO 1: </span>
-                                <span style="font-weight: bold;">TITLE</span><br>
-                                <span style="font-size: .7rem; vertical-align:super; color: #888">pptx | 55mb</span>
+                                <span style="font-weight: bold; color: rgb(63, 150, 201);">LECTURE NO. {{lecture.no}} </span>
+                                <span style="font-weight: bold;">{{lecture.title}}</span><br>
+                                <span style="font-size: .7rem; vertical-align:super; color: #888">{{lecture.file_loc|filename|stringformat:'s'}}</span>
                             </div>
                         </div>
+                        {%endif%}
+                        {%endfor%}
                         <!-- END OF Lectures -->
                     </div>
                     <!-- END OF MATERIALS TAB -->

@@ -24,5 +24,7 @@ urlpatterns = [
     path('downvote/<str:post_id>',views.downvote, name='downvote'),
     path('editclassroom/<str:room_name>', views.editclassroom, name='editclassroom'),
     path('editheader/<str:room_name>', views.editheader, name='editheader'),
-    path('editaccount/', views.editaccount, name='editaccount')
+    path('editaccount/', views.editaccount, name='editaccount'),
+    path('download/<file_name>', views.download, name='download'),
+    path('addlecture/<str:room_name>', views.addlecture, name='addlecture')
 ]

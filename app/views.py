@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect, render_to_response
 from django.http import JsonResponse
-from app.forms import aForm, aFormfromhome, LoginForm, RegisterForm, ClassroomForm, JoinClassroomForm, EditClassroomForm, EditHeaderForm, EditAccountForm
-from app.models import Classroom, Professor, Student, Post, Lecture, Event, Message, Login, Account
+from app.forms import aForm, aFormfromhome, LoginForm, RegisterForm, ClassroomForm, JoinClassroomForm, EditClassroomForm, EditHeaderForm, EditAccountForm, AddLectureForm
+from app.models import Classroom, Professor, Student, Post, Lecture, Event, Message, Login, Account, Lecture
 from passlib.hash import pbkdf2_sha256
 from django.contrib.auth import logout
 from django.views.decorators.cache import never_cache
@@ -11,6 +11,9 @@ import string
 from django.core.mail import send_mail
 from project import settings
 import os
+from wsgiref.util import FileWrapper
+from django.utils.encoding import smart_str
+import mimetypes
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -281,16 +284,18 @@ def classroom(request, room_name):
             'events': Event.objects.all(),
             'account': Student.objects.select_related().get(account__login__email=email_session),
             'students': Student.objects.all(),
-            'classroom': Classroom.objects.get(room_name=room_name)
+            'classroom': Classroom.objects.get(room_name=room_name),
+            'lectures': Lecture.objects.all()
         }
     elif login.category == "PROFESSOR":
-            context = {
-                'posts': Post.objects.all(),
-                'events': Event.objects.all(),
-                'account': Professor.objects.select_related().get(account__login__email=email_session),
-                'students': Student.objects.all(),
-                'classroom': Classroom.objects.get(room_name=room_name)
-            }
+        context = {
+            'posts': Post.objects.all(),
+            'events': Event.objects.all(),
+            'account': Professor.objects.select_related().get(account__login__email=email_session),
+            'students': Student.objects.all(),
+            'classroom': Classroom.objects.get(room_name=room_name),
+            'lectures': Lecture.objects.all()
+        }
 
     return render(request, 'classroom.html', context)
 
@@ -462,12 +467,12 @@ def upvote(request, post_id):
             'students': Student.objects.all()
         }
     elif category == "PROFESSOR":
-            context = {
-                'posts': Post.objects.all(),
-                'events': Event.objects.all(),
-                'account': Professor.objects.select_related().get(account__login__email=email),
-                'students': Student.objects.all()
-            }
+        context = {
+            'posts': Post.objects.all(),
+            'events': Event.objects.all(),
+            'account': Professor.objects.select_related().get(account__login__email=email),
+            'students': Student.objects.all()
+        }
     return JsonResponse(context)
 
 def downvote(request, post_id):
@@ -496,12 +501,12 @@ def downvote(request, post_id):
             'students': Student.objects.all()
         }
     elif category == "PROFESSOR":
-            context = {
-                'posts': Post.objects.all(),
-                'events': Event.objects.all(),
-                'account': Professor.objects.select_related().get(account__login__email=email),
-                'students': Student.objects.all()
-            }
+        context = {
+            'posts': Post.objects.all(),
+            'events': Event.objects.all(),
+            'account': Professor.objects.select_related().get(account__login__email=email),
+            'students': Student.objects.all()
+        }
     return JsonResponse(context)
 
 #EDIT HEADER
@@ -533,3 +538,41 @@ def editaccount(request):
             return HttpResponse(MyAccountForm.errors)
     
     return redirect('/home/')
+
+
+def download(request, file_name):
+    file_path = settings.MEDIA_ROOT + '/media/' + file_name
+    file_wrapper = FileWrapper(open(file_path, 'rb'))
+    file_mimetype = mimetypes.guess_type(file_path)
+    response = HttpResponse(file_wrapper, content_type=file_mimetype)
+    response['X-Sendfile'] = file_path
+    response['Content-Length'] = os.stat(file_path).st_size
+    response['Content-Disposition'] = 'attachment; filename=%s' % smart_str(file_name)
+    return response
+
+
+def addlecture(request, room_name):
+    email = request.session.get('email')
+    category = request.session.get('category')
+    if category == 'STUDENT':
+        acct = Student.objects.select_related().get(account__login__email=email)
+    elif category == 'PROFESSOR':
+        acct = Professor.objects.select_related().get(account__login__email=email)
+
+    MyLectureForm = AddLectureForm(request.POST, request.FILES)
+    if request.method == "POST":
+        if MyLectureForm.is_valid():
+            lecture = Lecture()
+
+            lecture.no = MyLectureForm.cleaned_data['no']
+            lecture.title = MyLectureForm.cleaned_data['title']
+            lecture.file_loc = MyLectureForm.cleaned_data['file_loc']
+            lecture.date = datetime.datetime.now()
+            account = acct.account
+            lecture.account = account
+            lecture.classroom = Classroom.objects.get(room_name=room_name)
+            lecture.save()
+        else:
+            return HttpResponse("form invalid")
+    return redirect('/classroom/'+room_name)
+    

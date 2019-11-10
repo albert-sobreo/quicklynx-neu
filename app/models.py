@@ -148,9 +148,16 @@ class Message(models.Model):
         return self.date
 
 class Lecture(models.Model):
-    lecture_no = models.FloatField(null=True, blank=True)
-    lecture_title = models.CharField(max_length=200, null=True, blank=True)
+    no = models.FloatField(null=True, blank=True)
+    title = models.CharField(max_length=200, null=True, blank=True)
     file_loc = models.FileField(upload_to='media', null=True, blank=True)
     date = models.DateTimeField()
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE)
+
+    def extension(self):
+        name, extension = os.path.splitext(self.file_loc.name)
+        return extension
+
+    def __str__(self):
+        return self.title

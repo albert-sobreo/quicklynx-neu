@@ -75,3 +75,9 @@ class EditHeaderForm(forms.Form):
 class EditAccountForm(forms.Form):
     first_name = forms.CharField(max_length=50)
     last_name = forms.CharField(max_length=50)
+
+
+class AddLectureForm(forms.Form):
+    no = forms.FloatField()
+    title = forms.CharField()
+    file_loc = forms.FileField()
