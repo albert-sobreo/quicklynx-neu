@@ -56,3 +56,22 @@ class RegisterForm(forms.Form):
     school_id = forms.CharField(max_length=50)
     email = forms.EmailField(max_length=50)
     password = forms.CharField(max_length=50)
+
+
+class EditClassroomForm(forms.Form):
+    room_name = forms.CharField(max_length=50)
+    time_start = forms.TimeField(input_formats=['%H:%M', '%I:%M%p', '%I:%M %p'])
+    time_end = forms.TimeField(input_formats=['%H:%M', '%I:%M%p', '%I:%M %p'])
+    days = forms.CharField(max_length=10)
+    date_start = forms.DateField()
+    date_end = forms.DateField()
+    year_start = forms.CharField(max_length=4)
+    semester = forms.CharField(max_length=25)
+
+class EditHeaderForm(forms.Form):
+    headerpix = forms.ImageField()
+
+
+class EditAccountForm(forms.Form):
+    first_name = forms.CharField(max_length=50)
+    last_name = forms.CharField(max_length=50)

@@ -58,3 +58,7 @@ input{
     filter: invert();
     cursor: pointer;
 }
+
+.select-buttons-materials{
+    font-family: 'Fjalla One', sans-serif;
+}

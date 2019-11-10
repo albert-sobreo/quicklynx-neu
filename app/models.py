@@ -147,3 +147,10 @@ class Message(models.Model):
     def __str__(self):
         return self.date
 
+class Lecture(models.Model):
+    lecture_no = models.FloatField(null=True, blank=True)
+    lecture_title = models.CharField(max_length=200, null=True, blank=True)
+    file_loc = models.FileField(upload_to='media', null=True, blank=True)
+    date = models.DateTimeField()
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE)

@@ -110,29 +110,132 @@
                         <div class="container border-top" style="padding: 20px;">
                             <div class="row">
                                 <ul>
-                                    all of these pages must be within the same page
-                                    <li class="links"><a href="/classroom/{{classroom.room_name}}">Posts</a></li>
-                                    <li class="links"><a href="#">Materials</a></li>
-                                    <li class="links"><a href="#">Attendance</a></li>
-                                    <li class="links"><a href="#">Grades</a></li>
-                                    <li class="links"><a href="#">Members</a></li>
+                                    <li class="links"><a href="#" id="POST">Posts</a></li>
+                                    <li class="links"><a href="#" id="MATERIALS">Materials</a></li>
+                                    <li class="links"><a href="#" id="ATTENDANCE">Attendance</a></li>
+                                    <li class="links"><a href="#" id="GRADES">Grades</a></li>
+                                    <li class="links"><a href="#" id="MEMBERS">Members</a></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- MIDDLE COLUMN -->
+                <!-- MIDDLE COLUMN-->
                 <div class="col-6 border-right border-left" style="min-height: 100vh;">
                     <!-- HEADER -->
                     {% if classroom.headerpix|length == 0 %}
-                        <div class="row border-bottom" style="min-height: 75px; background: rgb(10, 0, 81); color: white">
+                        <div class="row border-bottom" style="min-height: 75px; background: rgb(10, 0, 81); color: white;">
                     {%endif%}
                     {% if classroom.headerpix|length > 0 %}
-                        <div class="row border-bottom" style="min-height: 75px; background: url({{classroom.headerpix.url}}); color: white; background-size: cover; background-position: center">
+                        <div class="row border-bottom" style="min-height: 75px; background: url({{classroom.headerpix.url}}); color: white; background-size: cover; background-position: center;">
                     {%endif%}
+                    <div class="modal" id="changeheaderpix" style="color: black">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Change Header</h4>
+                                    <button class="close" type="button" data-dismiss="modal">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/editheader/{{classroom.room_name}}" method="POST" enctype="multipart/form-data">{%csrf_token%}
+                                        <img id="blah" src="#" alt="Header" style="object-fit: cover; background-size:cover; background-position:center; height:95px; width:460px">
+                                        <div class="form-group">
+                                            <input type="file" class="form-control-file" id="imgInp" name="headerpix">
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-info" type="submit">Change</button>
+                                        </div>
+                                    </form> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                         <div class="aligner col">
-                            <h3 style="text-shadow: 0 0 5px black;">{{classroom.room_name}}</h3>
-                            <span style="font-family: 'Fjalla One', sans-serif; text-shadow: 0 0 5px black">{{account.account.first_name}}
+                            <h3 style="text-shadow: 0 0 5px black; cursor:pointer; background: rgba(0,0,0,0)" data-toggle="modal" data-target="#editroom" type="button" title="Edit this Room">{{classroom.room_name}}</h3>
+                            {% if account.account.login.category == "PROFESSOR" %}
+                            <div class="modal" id="editroom" style="color: black">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Edit this classroom</h4>
+                                            <button class="close" type="button" data-dismiss="modal">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="/editclassroom/{{classroom.room_name}}" class="form-group" method="POST">{%csrf_token%}
+                                                <div class="form-group">
+                                                    <label for="invite_token">Token</label>
+                                                    <input type="text" id="invite_token" disabled value="{{classroom.invite_token}}" class="form-control form-control-sm">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="room_name">Classroom Name</label>
+                                                    <input type="text" placeholder="Classroom Name" name="room_name" class="form-control form-control-sm" value="{{classroom.room_name}}" id="room_name"required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="time_start">Time Start</label>
+                                                    <input type="time" name="time_start" id="time_start" class="form-control form-control-sm" value="{{classroom.time_start|time:'H:i'}}" required>
+                                                    <label for="time_end">Time End</label>
+                                                    <input type="time" name="time_end" id="time_end" class="form-control form-control-sm" value="{{classroom.time_end|time:'H:i'}}" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="days">Days</label>
+                                                    <input type="text" name="days" id="days" class="form-control form-control-sm" placeholder="MTh/TF/W/S" value="{{classroom.days}}" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="date_start">Date Start</label>
+                                                    <input type="date" name="date_start" id="date_start" class="form-control form-control-sm" value="{{classroom.date_start|date:'Y-m-d'}}" required>
+                                                    <label for="date_end">Date End</label>
+                                                    <input type="date" name="date_end" id="date_end" class="form-control form-control-sm" value="{{classroom.date_end|date:'Y-m-d'}}" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="year">Year</label>
+                                                    <input type="text" name="year_start" id="year" class="form-control form-control-sm" value="{{classroom.year_start}}" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="semester">Semester</label>
+                                                    <select class="form-control form-control-sm" id="semester" name="semester" required>
+                                                        <option value="" style="color:#999">Choose Semester</option>
+                                                        <option value="FIRST" {% if classroom.semester == "FIRST" %} selected {%endif%}>1st Semester</option>
+                                                        <option value="SECOND" {% if classroom.semester == "SECOND" %} selected {%endif%}>2nd Semester</option>
+                                                        <option value="SUMMER" {% if classroom.semester == "SUMMER" %} selected {%endif%}>Summer</option>
+                                                    </select>
+                                                </div>
+                                                <button type="submit" class="btn btn-info">Confirm Changes</button>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div style="height: 100%; width: 100px; cursor: pointer" title="Change Header" data-toggle="modal" data-target="#changeheaderpix"></div>
+                            {%endif%}
+                            <span><span data-toggle="modal" data-target="#editaccount" style="font-family: 'Fjalla One', sans-serif; text-shadow: 0 0 5px black; cursor: pointer">{{account.account.first_name}}</span>
+                                <div class="modal" id="editaccount" style="color: black; text-shadow: 0 0 0 white">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Edit this classroom</h4>
+                                                <button class="close" type="button" data-dismiss="modal">&times;</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="/editaccount/" method="POST">{%csrf_token%}
+                                                    <div class="form-group">
+                                                        <label for="fname">First Name</label>
+                                                        <input type="text" name="first_name" id="fname" class="form-control form-control-sm" value="{{account.account.first_name}}">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="lname">Last Name</label>
+                                                        <input type="text" name="last_name" id="lname" class="form-control form-control-sm" value="{{account.account.last_name}}">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <button type="submit" class="btn btn-info">Confirm Changes</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
                                 {%if account.account.propix|length == 0 %}
                                     <img src="https://kerrpanel.com/wp-content/uploads/2018/05/default_avatar-2.gif" alt="" style="object-fit: cover; border-radius: 5px; margin: 0 10px 0" height="50px" width="50px">
                                 {%endif%}
@@ -143,55 +246,86 @@
                         </div>
                     </div>
                     <!-- TEXT AREA -->
-                    <form action="/makepost/{{classroom.room_name}}" method="POST">
-                        {%csrf_token%}
-                        <textarea rows="1" cols="auto" style="height:1em;" id="text" class="col" placeholder="Create Post" name="text"></textarea>
-                    </form>
-                    <!-- POST CONTROLS -->
-                    
-                    <!-- BLANK SPACE -->
-                    <div class="row" style="height: 10px; background: rgb(222, 226,230)">
-                    </div>
-                    
-                    
-                        <!-- INSERT POSTS HERE -->
-                        <!-- CREATE YOUR OWN CSS STYLES FOR POSTS -->
-                    {%for post in posts reversed%}
-                        {%if post.classroom in account.classroom.all%}
-                            {%if post.classroom|stringformat:'s' == classroom|stringformat:'s'%}
-                                {%if classroom|stringformat:'s' in account.classroom.all|stringformat:'s'%}
-                                    <div class="row border-top border-bottom">
-                                        <div class="col-1 text-center upvotedownvote" >
-                                            <div id="refreshup{{post.id}}" class="" onclick=upvote({{post.id}})>{%if post in account.upvoted_post.all%}<i class="fas fa-sort-up" style="color:rgb(184, 75, 184)"></i>{%else%}<i class="fas fa-sort-up"></i>{%endif%}</div>
-                                            <div id="nums{{post.id}}"class="">{{post.upvotes|add:post.downvotes}}</div>
-                                            <div id="refreshdown{{post.id}}" class="" onclick=downvote({{post.id}})>{%if post in account.downvoted_post.all%}<i class="fas fa-sort-down" style="color: rgb(56, 121, 121);"></i>{%else%}<i class="fas fa-sort-down"></i>{%endif%}</div>
-                                        </div>
-                                        <div class="">
-                                            <div class="row">
-                                                <div class="col-1">
-                                                    {%if post.account.propix|length == 0 %}
-                                                        <img src="https://kerrpanel.com/wp-content/uploads/2018/05/default_avatar-2.gif" alt="" height="25px" width="25px" style="object-fit: cover; margin: 0; border-radius: 50%;">
-                                                    {%endif%}
-                                                    {%if post.account.propix|length > 0 %}
-                                                        <img src="{{post.account.propix.url}}" alt="" height="25px" width="25px" style="object-fit: cover; margin: 0; border-radius: 50%;">
-                                                    {%endif%}
+                    <!-- POST TAB -->
+                    <div class="MIDDLEPOST" id="MIDDLEPOST" style="display: none;">
+                        <form action="/makepost/{{classroom.room_name}}" method="POST">
+                            {%csrf_token%}
+                            <textarea rows="1" cols="auto" style="height:1em;" id="text" class="col" placeholder="Create Post" name="text"></textarea>
+                        </form>
+                        <!-- POST CONTROLS -->
+
+                        <!-- BLANK SPACE -->
+                        <div class="row" style="height: 10px; background: rgb(222, 226,230)">
+                        </div>
+
+
+                            <!-- INSERT POSTS HERE -->
+                            <!-- CREATE YOUR OWN CSS STYLES FOR POSTS -->
+                        {%for post in posts reversed%}
+                            {%if post.classroom in account.classroom.all%}
+                                {%if post.classroom|stringformat:'s' == classroom|stringformat:'s'%}
+                                    {%if classroom|stringformat:'s' in account.classroom.all|stringformat:'s'%}
+                                        <div class="row border-top border-bottom">
+                                            <div class="col-1 text-center upvotedownvote" >
+                                                <div id="refreshup{{post.id}}" class="" onclick=upvote({{post.id}})>{%if post in account.upvoted_post.all%}<i class="fas fa-sort-up" style="color:rgb(184, 75, 184)"></i>{%else%}<i class="fas fa-sort-up"></i>{%endif%}</div>
+                                                <div id="nums{{post.id}}"class="">{{post.upvotes|add:post.downvotes}}</div>
+                                                <div id="refreshdown{{post.id}}" class="" onclick=downvote({{post.id}})>{%if post in account.downvoted_post.all%}<i class="fas fa-sort-down" style="color: rgb(56, 121, 121);"></i>{%else%}<i class="fas fa-sort-down"></i>{%endif%}</div>
+                                            </div>
+                                            <div class="">
+                                                <div class="row">
+                                                    <div class="col-1">
+                                                        {%if post.account.propix|length == 0 %}
+                                                            <img src="https://kerrpanel.com/wp-content/uploads/2018/05/default_avatar-2.gif" alt="" height="25px" width="25px" style="object-fit: cover; margin: 0; border-radius: 50%;">
+                                                        {%endif%}
+                                                        {%if post.account.propix|length > 0 %}
+                                                            <img src="{{post.account.propix.url}}" alt="" height="25px" width="25px" style="object-fit: cover; margin: 0; border-radius: 50%;">
+                                                        {%endif%}
+                                                    </div>
+                                                    <div class="col">
+                                                        <span style="font-weight: bold;">{{post.classroom.room_name}}</span>&nbsp;<i class="fas fa-angle-right" style="vertical-align:middle;"></i><span class="small-size">&nbsp;{{post.account}}&nbsp;{{post.date|timesince}} ago</span>
+                                                    </div>
                                                 </div>
-                                                <div class="col">
-                                                    <span style="font-weight: bold;">{{post.classroom.room_name}}</span>&nbsp;<i class="fas fa-angle-right" style="vertical-align:middle;"></i><span class="small-size">&nbsp;{{post.account}}&nbsp;{{post.date|timesince}} ago</span>
+                                                <div class="row">
+                                                    <div class="col" style="padding:5px 50px 0px">
+                                                        {{post.text|safe}}
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col" style="padding:5px 50px 0px">
-                                                    {{post.text|safe}}
-                                                </div>
-                                            </div>
                                         </div>
-                                    </div>
+                                    {%endif%}
                                 {%endif%}
                             {%endif%}
-                        {%endif%}
-                    {%endfor%}
+                        {%endfor%}
+                    </div>
+                    <!-- END OF POST TAB -->
+
+                    <!-- MATERIALS TAB -->
+                    <div class="MIDDLEMATERIALS" id="MIDDLEMATERIALS" style="display: block">
+                        <div class="row text-center border-bottom select-buttons-materials">
+                            <div class="col" style="cursor: pointer;">Lectures</div>
+                            <div class="col border-right border-left" style="cursor: pointer;">Assignments</div>
+                            <div class="col" style="cursor: pointer;">Quizzes</div>
+                        </div>
+                        <!-- Lectures -->
+                        <div class="row">
+                            <button class="btn btn-success col" style="border-radius: 0; margin-bottom: 20px">Upload a Lecture</button>
+                        </div>
+                        <div class="row border-top border-bottom">
+                            <div class="col-1 border-right aligner ">
+                                <i class="fas fa-book-open" style="color: rgb(164, 211, 207);" class="aligner-item"></i>
+                            </div>
+                            <div class="col-11">
+                                <span style="font-weight: bold;">LECTURE NO 1: </span>
+                                <span style="font-weight: bold;">TITLE</span><br>
+                                <span style="font-size: .7rem; vertical-align:super; color: #888">pptx | 55mb</span>
+                            </div>
+                        </div>
+                        <!-- END OF Lectures -->
+                    </div>
+                    <!-- END OF MATERIALS TAB -->
                 </div>
+
+                
                 <!-- RIGHT COLUMN -->
                 <div class="col-3 border-right border-left text-center" style="min-height: 100vh;">
                     <div class="row border-bottom sticky-top" style="min-height: 75px;">
@@ -258,6 +392,35 @@
             $("#refreshdown"+post_id).load(location.href + " #refreshdown"+post_id)
             $("#nums"+post_id).load(location.href + " #nums"+post_id)
         }
+    </script>
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+              var reader = new FileReader();
+              
+              reader.onload = function(e) {
+                $('#blah').attr('src', e.target.result);
+              }
+              
+              reader.readAsDataURL(input.files[0]);
+            }
+          }
+          
+          $("#imgInp").change(function() {
+            readURL(this);
+          });
+    </script>
+    <script>
+        $(function(){
+            $("#POST").click(function(e){
+                $("#MIDDLEPOST").css("display", "block")
+                $("#MIDDLEMATERIALS").css("display", "none")
+            })
+            $("#MATERIALS").click(function(e){
+                $("#MIDDLEPOST").css("display", "none")
+                $("#MIDDLEMATERIALS").css("display", "block")
+            })
+        })
     </script>
 </body>
 </html>

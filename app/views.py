@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect, render_to_response
 from django.http import JsonResponse
-from app.forms import aForm, aFormfromhome, LoginForm, RegisterForm, ClassroomForm, JoinClassroomForm
+from app.forms import aForm, aFormfromhome, LoginForm, RegisterForm, ClassroomForm, JoinClassroomForm, EditClassroomForm, EditHeaderForm, EditAccountForm
 from app.models import Classroom, Professor, Student, Post, Lecture, Event, Message, Login, Account
 from passlib.hash import pbkdf2_sha256
 from django.contrib.auth import logout
@@ -10,7 +10,9 @@ import random
 import string
 from django.core.mail import send_mail
 from project import settings
+import os
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 #VIEW FOR LOGIN PAGE
 def login(request):
@@ -292,6 +294,28 @@ def classroom(request, room_name):
 
     return render(request, 'classroom.html', context)
 
+#EDIT CLASSROOM
+def editclassroom(request, room_name):
+    classroom = Classroom.objects.get(room_name=room_name)
+    MyEditForm = EditClassroomForm(request.POST)
+    if request.method == "POST":
+        if MyEditForm.is_valid():
+            classroom.room_name = MyEditForm.cleaned_data['room_name']
+            classroom.time_start = MyEditForm.cleaned_data['time_start']
+            classroom.time_end = MyEditForm.cleaned_data['time_end']
+            classroom.days = MyEditForm.cleaned_data['days']
+            classroom.date_start = MyEditForm.cleaned_data['date_start']
+            classroom.date_end = MyEditForm.cleaned_data['date_end']
+            classroom.year_start = MyEditForm.cleaned_data['year_start']
+            classroom.semester = MyEditForm.cleaned_data['semester']
+
+            classroom.save()
+        else:
+            return HttpResponse('form invalid')
+    print("HELLO WORLD")
+    return redirect('/classroom/{}'.format(classroom.room_name))
+
+
 #PROCESS FOR CREATING ROOMS
 def makeclassroom(request):
     email = request.session.get('email')
@@ -479,3 +503,33 @@ def downvote(request, post_id):
                 'students': Student.objects.all()
             }
     return JsonResponse(context)
+
+#EDIT HEADER
+def editheader(request, room_name):
+    classroom = Classroom.objects.get(room_name=room_name)
+    MyHeaderForm = EditHeaderForm(request.POST, request.FILES)
+    if request.method == "POST":
+        if MyHeaderForm.is_valid():
+            if os.path.isfile(BASE_DIR + str(classroom.headerpix.url)):
+                os.remove(BASE_DIR + str(classroom.headerpix.url))
+                print("path remove")
+            classroom.headerpix = MyHeaderForm.cleaned_data['headerpix']
+            classroom.save()
+        else:
+            return HttpResponse("FORM INVALID")
+    return redirect('/classroom/'+room_name)
+
+
+def editaccount(request):
+    email = request.session.get('email')
+    account = Account.objects.select_related().get(login__email=email)
+    MyAccountForm = EditAccountForm(request.POST)
+    if request.method == "POST":
+        if MyAccountForm.is_valid():
+            account.first_name = MyAccountForm.cleaned_data['first_name']
+            account.last_name = MyAccountForm.cleaned_data['last_name']
+            account.save()
+        else:
+            return HttpResponse(MyAccountForm.errors)
+    
+    return redirect('/home/')

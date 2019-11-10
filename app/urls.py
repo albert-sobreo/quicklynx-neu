@@ -21,5 +21,8 @@ urlpatterns = [
     path('makeclassroom/', views.makeclassroom, name='makeclassroom'),
     path('joinclassroom/', views.joinclassroom, name='joinclassroom'),
     path('upvote/<str:post_id>', views.upvote, name='upvote'),
-    path('downvote/<str:post_id>',views.downvote, name='downvote')
+    path('downvote/<str:post_id>',views.downvote, name='downvote'),
+    path('editclassroom/<str:room_name>', views.editclassroom, name='editclassroom'),
+    path('editheader/<str:room_name>', views.editheader, name='editheader'),
+    path('editaccount/', views.editaccount, name='editaccount')
 ]
