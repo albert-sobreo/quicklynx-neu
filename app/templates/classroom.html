@@ -283,7 +283,7 @@
                                                         {%endif%}
                                                     </div>
                                                     <div class="col">
-                                                        <span style="font-weight: bold;">{{post.account}}</span>&nbsp;<i class="fas fa-angle-right" style="vertical-align:middle;"></i><span class="small-size">&nbsp;&nbsp;{{post.date|timesince}} ago</span>
+                                                        <span style="font-weight: bold;">{{post.account.first_name}} {{post.account.last_name}}</span><span class="small-size">&nbsp;&nbsp;{{post.date|timesince}} ago</span>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -303,14 +303,16 @@
                     <!-- MATERIALS TAB -->
                     <div class="MIDDLEMATERIALS" id="MIDDLEMATERIALS" style="display: none">
                         <div class="row text-center border-bottom select-buttons-materials">
-                            <div class="col" style="cursor: pointer; color: rgb(63, 150, 201);">Lectures</div>
-                            <div class="col border-right border-left" style="cursor: pointer; color: rgb(144, 47, 201);">Assignments</div>
-                            <div class="col" style="cursor: pointer; color: rgb(218, 81, 81);">Quizzes</div>
+                            <div class="col" style="cursor: pointer; color: rgb(102, 188, 238);">Lectures</div>
+                            <div class="col border-right border-left" style="cursor: pointer; color: rgb(175, 85, 226);">Assignments</div>
+                            <div class="col" style="cursor: pointer; color: rgb(236, 105, 105);">Quizzes</div>
                         </div>
                         <!-- Lecture button -->
-                        <div class="row">
-                            <button class="btn btn-success col" style="border-radius: 0; margin-bottom: 20px" type="button" data-toggle="modal" data-target="#addlecture">Upload a Lecture</button>
-                        </div>
+                        {% if account.account.login.category == "PROFESSOR" %}
+                            <div class="row">
+                                <button class="btn btn-success col" style="border-radius: 0; margin-bottom: 20px" type="button" data-toggle="modal" data-target="#addlecture">Add Lecture</button>
+                            </div>
+                        {%endif%}
                         <!-- ADD LECTURE MODAL -->
                         <div class="modal" id="addlecture" style="color: black">
                             <div class="modal-dialog">
