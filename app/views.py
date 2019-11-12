@@ -14,6 +14,7 @@ import os
 from wsgiref.util import FileWrapper
 from django.utils.encoding import smart_str
 import mimetypes
+from django.shortcuts import get_object_or_404
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -431,8 +432,7 @@ def joinclassroom(request):
         if MyJoinForm.is_valid():
             token = MyJoinForm.cleaned_data['token']
 
-            classroom = Classroom.objects.get(invite_token=token)
-
+            classroom = get_object_or_404(Classroom, invite_token=token)
             acct.classroom.add(classroom)
 
         else:
