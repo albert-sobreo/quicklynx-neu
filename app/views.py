@@ -576,3 +576,6 @@ def addlecture(request, room_name):
             return HttpResponse("form invalid")
     return redirect('/classroom/'+room_name)
     
+
+def messages(request):
+    return render(request, 'messages.html', {})
