@@ -163,8 +163,15 @@ class Lecture(models.Model):
         return self.title
 
 
-class Messages(models.Model):
+class Message(models.Model):
     message = models.CharField(max_length=2048, null=True, blank=True)
+    subject = models.CharField(max_length=140, null=True, blank=True)
     date = models.DateTimeField()
-    message_from = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="message_from")
-    message_to = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="message_to")
+    message_from = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="message_from", blank=True, null=True)
+    message_to = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="message_to", blank=True, null=True)
+
+    class Meta:
+        db_table = 'message'
+
+    def __str__(self):
+        return self.subject

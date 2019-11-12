@@ -79,6 +79,10 @@
         ul{
             padding: 0;
         }
+        .message-subject{
+            overflow: hidden;
+            height: 75px;
+        }
     </style>
 </head>
 <body onload="init()">
@@ -110,8 +114,38 @@
                     </div>
                 </div>
                 <!-- MIDDLE COLUMN -->
-                <div class="col-3 border-right border-left" style="min-height: 100vh;">
-                    omae wa mou
+                <div class="col-3 border-right border-left" style=" height: 100vh; overflow-y:auto">
+                    <!-- HEADER -->
+                    <div class="row border-bottom" style="min-height: 75px; background: rgb(10, 0, 81); color: white">
+                        <div class="col">
+                            <h1 style="margin-top: 10px;">Messages</h1>
+                        </div>
+                    </div>
+                    <!-- END HEADER -->
+                    <!-- MESSAGE LIST -->
+                    {%for message in messagess reversed%}
+                        <div class="row message-subject" style="cursor: pointer;" onclick=viewmessagebox({{forloop.counter0}})>
+                            <div class="col-2 border-bottom text-center" style="padding: 0">
+                                {% if message.message_from.propix|length == 0 %}
+                                <img src="https://kerrpanel.com/wp-content/uploads/2018/05/default_avatar-2.gif" height="30px" width="30px">
+                                {% elif message.message_from.propix|length > 0 %}
+                                <img src="{{message.message_from.propix.url}}" height="30px" width="30px">
+                                {%endif%}
+                            </div>
+                            <div class="col-10 border-bottom" style="padding: 0">
+                                <span style="font-weight: 600; margin: 0">{{message.message_from.first_name}} {{message.message_from.last_name}}</span><br>
+                                <span style="color: rgb(82, 173, 189)">{{message.subject}}</span><br>
+                                <span style="color: #aaa;">{{message.date|date:"M, j Y g:i a"}}</span>
+                            </div>
+                        </div>
+                    {%endfor%}
+                    <!-- END MESSAGE LIST -->
+                </div>
+                <!-- END MIDDLE COLUMN -->
+                <div class="col-8 border-right border-left" style="height: 100vh; overflow-y:auto;">
+                    <div class="messagesarehere">
+                        USE AJAX TO PASS ARGUMENTS TO VIEWS.PY THEN RETRIEVE THE MESSAGE.# FROM THE CONTEXT PROCESSED FROM VIEWS.PY THEN RELOAD THIS DIV
+                    </div>
                 </div>
             </div>
         </div>

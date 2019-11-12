@@ -578,4 +578,10 @@ def addlecture(request, room_name):
     
 
 def messages(request):
-    return render(request, 'messages.html', {})
+    email_session = request.session['email']
+    account = Account.objects.select_related().get(login__email=email_session)
+    context = {
+        'account': Professor.objects.select_related().get(account__login__email=email_session),
+        'messagess': Message.objects.filter(message_to=account)
+    }
+    return render(request, 'messages.html', context)

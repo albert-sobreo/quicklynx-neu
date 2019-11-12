@@ -11,3 +11,7 @@ def filename(value):
 def filesize(value):
     """Returns the filesize of the filename given in value"""
     return os.path.getsize(value)
+
+@register.filter
+def index(things, category):
+    return things.get(id=category)
