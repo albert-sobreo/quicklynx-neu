@@ -67,7 +67,7 @@ class Classroom(models.Model):
 
 
 class Post(models.Model):
-    text = models.CharField(max_length=100000, blank=True, null=True)
+    text = models.CharField(max_length=512, blank=True, null=True)
     date = models.DateTimeField()
     upvotes = models.IntegerField(default=0)
     downvotes = models.IntegerField(default=0)
@@ -136,17 +136,6 @@ class Event(models.Model):
         return self.title
 
 
-class Message(models.Model):
-    messege = models.CharField(max_length=512)
-    date = models.DateTimeField()
-    messagetoandfrom = models.ManyToManyField(Account, blank=True)
-
-    class Meta:
-        db_table = 'message'
-
-    def __str__(self):
-        return self.date
-
 class Lecture(models.Model):
     no = models.FloatField(null=True, blank=True)
     title = models.CharField(max_length=200, null=True, blank=True)
@@ -164,7 +153,7 @@ class Lecture(models.Model):
 
 
 class Message(models.Model):
-    message = models.CharField(max_length=2048, null=True, blank=True)
+    message = models.CharField(max_length=512, null=True, blank=True)
     subject = models.CharField(max_length=140, null=True, blank=True)
     date = models.DateTimeField()
     message_from = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="message_from", blank=True, null=True)

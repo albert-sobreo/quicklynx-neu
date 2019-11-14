@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect, render_to_response
 from django.http import JsonResponse
-from app.forms import aForm, aFormfromhome, LoginForm, RegisterForm, ClassroomForm, JoinClassroomForm, EditClassroomForm, EditHeaderForm, EditAccountForm, AddLectureForm
+from app.forms import aForm, aFormfromhome, LoginForm, RegisterForm, ClassroomForm, JoinClassroomForm, EditClassroomForm, EditHeaderForm, EditAccountForm, AddLectureForm, SendMessageForm
 from app.models import Classroom, Professor, Student, Post, Lecture, Event, Message, Login, Account, Lecture
 from passlib.hash import pbkdf2_sha256
 from django.contrib.auth import logout
@@ -318,7 +318,6 @@ def editclassroom(request, room_name):
             classroom.save()
         else:
             return HttpResponse('form invalid')
-    print("HELLO WORLD")
     return redirect('/classroom/{}'.format(classroom.room_name))
 
 
@@ -580,10 +579,19 @@ def addlecture(request, room_name):
 def messages(request):
     email_session = request.session['email']
     account = Account.objects.select_related().get(login__email=email_session)
-    context = {
-        'account': Professor.objects.select_related().get(account__login__email=email_session),
-        'messagess': Message.objects.filter(message_to=account)
+    category = request.session.get('category')
+    if category == 'STUDENT':
+        context = {
+        'account': Student.objects.select_related().get(account__login__email=email_session),
+        'messagess': Message.objects.filter(message_to=account),
+        'allaccounts': Account.objects.all()
     }
+    elif category == "PROFESSOR":
+        context = {
+            'account': Professor.objects.select_related().get(account__login__email=email_session),
+            'messagess': Message.objects.filter(message_to=account),
+            'allaccounts': Account.objects.all()
+        }
     return render(request, 'messages.html', context)
 
 
@@ -592,7 +600,7 @@ def messagecontent(request, message_id):
     account = Account.objects.select_related().get(login__email=email_session)
     messagecontent = Message.objects.filter(id=message_id).values()
     for x in messagecontent:
-        print(x)
+        pass
     context={
         'messagecontent': list(messagecontent)
     }
@@ -602,8 +610,40 @@ def messagecontent(request, message_id):
 def outbox(request):
     email_session = request.session['email']
     account = Account.objects.select_related().get(login__email=email_session)
-    context = {
-        'account': Professor.objects.select_related().get(account__login__email=email_session),
-        'messagess': Message.objects.filter(message_from=account)
+    category = request.session.get('category')
+    if category == 'STUDENT':
+        context = {
+        'account': Student.objects.select_related().get(account__login__email=email_session),
+        'messagess': Message.objects.filter(message_from=account),
+        'allaccounts': Account.objects.all()
     }
+    elif category == "PROFESSOR":
+        context = {
+            'account': Professor.objects.select_related().get(account__login__email=email_session),
+            'messagess': Message.objects.filter(message_from=account),
+            'allaccounts': Account.objects.all()
+        }
     return render(request, 'outbox.html', context)
+
+
+def sendmessage(request):
+    email_session = request.session.get('email')
+    account = Account.objects.select_related().get(login__email=email_session)
+    MyMsgForm = SendMessageForm(request.POST)
+    if request.method == "POST":
+        if MyMsgForm.is_valid():
+            message = MyMsgForm.cleaned_data['message']
+            to = MyMsgForm.cleaned_data['to']
+            subject = MyMsgForm.cleaned_data['subject']
+
+            msg = Message()
+
+            msg.message = message
+            msg.subject = subject
+            msg.message_from = account
+            msg.message_to = Account.objects.select_related().get(login__email=to)
+            msg.date = datetime.datetime.now()
+
+            msg.save()
+
+    return redirect('/message/')

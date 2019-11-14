@@ -12,7 +12,7 @@
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script defer src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.tiny.cloud/1/h7ncil8yogyrne1lyybkhxt64mn1uvf750wiac1b8randi5n/tinymce/5/tinymce.min.js"></script> 
-    <script>tinymce.init({selector:'textarea', height: "175px", menubar:true, statusbar: false, plugins: "save image media link lists fullscreen", toolbar: "styleselect | bold italic | numlist bullist | image media link | fullscreen | save"});</script>
+    <script>tinymce.init({selector:'textarea', height: "590px", menubar:true, statusbar: false, plugins: "save media link lists fullscreen", toolbar: "styleselect | bold italic | numlist bullist | image media link | fullscreen | save"});</script>
     <title>QuickLynx | Messages</title>
     <style>
         body{
@@ -82,6 +82,8 @@
         .message-subject{
             overflow: hidden;
             height: 75px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
     </style>
 </head>
@@ -104,7 +106,7 @@
                                 <ul>
                                     <li class="links" title="Inbox"><a href="/message/"><img src="https://img.icons8.com/cotton/64/000000/open-envelope--v2.png" height="30px" width="30px"></a></li>
                                     <li class="links" title="Sent"><a href="/outbox/"><img src="https://img.icons8.com/cotton/64/000000/open-envelope.png" height="30px" width="30px"></a></li>
-                                    <li class="links" title="New Mail"><a href="/newmessage/"><img src="https://img.icons8.com/cotton/64/000000/plus--v2.png" height="30px" width="30px"></a></li>
+                                    <li class="links" title="New Mail" id="new"><a href="#"><img src="https://img.icons8.com/cotton/64/000000/plus--v2.png" height="30px" width="30px"></a></li>
                                     <li class="links" title="Home"><a href="/home/"><img src="https://img.icons8.com/cotton/64/000000/circled-left--v1.png" height="30px" width="30px"></a></li>
                                 </ul>
                             </div>
@@ -130,9 +132,9 @@
                                 <img src="{{message.message_from.propix.url}}" height="30px" width="30px">
                                 {%endif%}
                             </div>
-                            <div class="col-10 border-bottom" style="padding: 0">
+                            <div class="col-10 border-bottom" style="padding: 0;">
                                 <span style="font-weight: 600; margin: 0">{{message.message_from.first_name}} {{message.message_from.last_name}} - {{message.message_to.first_name}} {{message.message_to.last_name}}</span><br>
-                                <span style="color: rgb(82, 173, 189)">{{message.subject}}</span><br>
+                                <span style="color: rgb(82, 173, 189);">{{message.subject}}</span><br>
                                 <span style="color: #aaa;">{{message.date|date:"M, j Y g:i a"}}</span>
                             </div>
                         </div>
@@ -140,13 +142,45 @@
                     <!-- END MESSAGE LIST -->
                 </div>
                 <!-- END MIDDLE COLUMN -->
-                <div class="col-8 border-right border-left" style="height: 100vh; overflow-y:auto;">
-                    <div class="container">
+                <!-- RIGHT COLUMN -->
+                <div class="col-8 border-right border-left" id="messagecontainer" style="height: 100vh; overflow-y:auto; background: rgb(248, 248, 248); display:block">
+                    <div class="container border" style="padding-top: 20px; margin-top: 20px; padding-bottom: 20px; margin-bottom: 20px; background: white">
                         <div id="messagesarehere" >
 
                         </div>
                     </div>
                 </div>
+                <!-- END RIGHT COLUMN -->
+                <!-- RIGHT COLUMN NEW MAIL -->
+                <div class="col-8 border-right border-left" id="newmail" style="height: 100vh; overflow-y:auto; background: rgb(248, 248, 248); display: none">
+                    <div class="container">
+                        <form action="/sendmessage/" method="POST">{%csrf_token%}
+                            <div class="form-group row">
+                                <div class="form-inline col text-right">
+                                    <label for="to" class="col-1 text-right">To:&nbsp;</label>
+                                    <select name="to" id="to" class="form-control form-control-sm col-11">
+                                        <option value="" selected>Select User</option>
+                                        {% for user in allaccounts|dictsort:"first_name" %}
+                                            {%if user.login.email != account.account.login.email%}
+                                                <option value="{{user.login.email}}">{{user.first_name}} {{user.last_name}}</option>
+                                            {%endif%}
+                                        {%endfor%}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="form-inline col text-left">
+                                    <label for="subject" class="col-1">Subject:&nbsp;</label>
+                                    <input type="text" id="subject" name="subject" class="form-control form-control-sm col-11">
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                <textarea rows="1" cols="auto" style="height:1em;" id="text" class="col" placeholder="Create Post" name="message"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- END RIGHT COLUMN NEW MAIL -->
             </div>
         </div>
     </div>
@@ -157,10 +191,16 @@
                 dataType: 'json',
                 success: function(x){
                     document.getElementById('messagesarehere').innerHTML = 
-                    '<div style="color:red">' + x.message + '</div>'
+                    '<div><span style="margin:10px 10px 10px;"><span style="font-weight:bold">Subject: </span>' + x.subject + "</span><br><br>" + "<span>" + x.message + '</span></div>'
                 }
             })
         }
+    </script>
+    <script>
+        $('#new').click(function(e){
+            $('#newmail').css('display', 'block')
+            $('#messagecontainer').css('display', 'none')
+        })
     </script>
 </body>
 </html>

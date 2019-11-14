@@ -29,5 +29,6 @@ urlpatterns = [
     path('addlecture/<str:room_name>', views.addlecture, name='addlecture'),
     path('message/', views.messages, name='message'),
     path('messagecontent/<int:message_id>', views.messagecontent, name='messagecontent'),
-    path('outbox/', views.outbox, name='outbox')
+    path('outbox/', views.outbox, name='outbox'),
+    path('sendmessage/', views.sendmessage, name='sendmessage')
 ]

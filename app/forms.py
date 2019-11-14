@@ -81,3 +81,9 @@ class AddLectureForm(forms.Form):
     no = forms.FloatField()
     title = forms.CharField()
     file_loc = forms.FileField()
+
+
+class SendMessageForm(forms.Form):
+    to = forms.CharField(max_length=100)
+    subject = forms.CharField(max_length=240)
+    message = forms.CharField(widget=forms.Textarea)

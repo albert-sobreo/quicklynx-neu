@@ -303,11 +303,12 @@
                     <!-- MATERIALS TAB -->
                     <div class="MIDDLEMATERIALS" id="MIDDLEMATERIALS" style="display: none">
                         <div class="row text-center border-bottom select-buttons-materials">
-                            <div class="col" style="cursor: pointer; color: rgb(102, 188, 238);">Lectures</div>
-                            <div class="col border-right border-left" style="cursor: pointer; color: rgb(175, 85, 226);">Assignments</div>
-                            <div class="col" style="cursor: pointer; color: rgb(236, 105, 105);">Quizzes</div>
+                            <div id="lectures" class="col" style="cursor: pointer; color: rgb(102, 188, 238); background: rgb(10, 0, 81)">Lectures</div>
+                            <div id="assignments" class="col border-right border-left" style="cursor: pointer; color: rgb(175, 85, 226);">Assignments</div>
+                            <div id="quizzes" class="col" style="cursor: pointer; color: rgb(236, 105, 105);">Quizzes</div>
                         </div>
                         <!-- Lecture button -->
+                        <div id="mainlecture">
                         {% if account.account.login.category == "PROFESSOR" %}
                             <div class="row">
                                 <button class="btn btn-success col" style="border-radius: 0; margin-bottom: 20px" type="button" data-toggle="modal" data-target="#addlecture">Add Lecture</button>
@@ -345,21 +346,42 @@
                         <!-- ADD LECTURE MODAL END -->
                         <!-- button end -->
                         <!-- LECTURE MAIN -->
-                        {%for lecture in lectures|dictsort:"no"%}
-                        {%if classroom|stringformat:"s" == lecture.classroom|stringformat:"s"%}
-                        <div class="row border-top border-bottom" onclick="location.href='/download/{{lecture.file_loc|filename}}'" style="cursor: pointer;">
-                            <div class="col-1 border-right aligner ">
-                                <i class="fas fa-book-open" style="color: rgb(164, 211, 207);" class="aligner-item"></i>
+                            {%for lecture in lectures|dictsort:"no"%}
+                            {%if classroom|stringformat:"s" == lecture.classroom|stringformat:"s"%}
+                            <div class="row border-top border-bottom" onclick="location.href='/download/{{lecture.file_loc|filename}}'" style="cursor: pointer;">
+                                <div class="col-1 border-right aligner ">
+                                    <i class="fas fa-book-open" style="color: rgb(164, 211, 207);" class="aligner-item"></i>
+                                </div>
+                                <div class="col-11">
+                                    <span style="font-weight: bold; color: rgb(63, 150, 201);">LECTURE NO. {{lecture.no}} </span>
+                                    <span style="font-weight: bold;">{{lecture.title}}</span><br>
+                                    <span style="font-size: .7rem; vertical-align:super; color: #888">{{lecture.file_loc|filename|stringformat:'s'}}</span>
+                                </div>
                             </div>
-                            <div class="col-11">
-                                <span style="font-weight: bold; color: rgb(63, 150, 201);">LECTURE NO. {{lecture.no}} </span>
-                                <span style="font-weight: bold;">{{lecture.title}}</span><br>
-                                <span style="font-size: .7rem; vertical-align:super; color: #888">{{lecture.file_loc|filename|stringformat:'s'}}</span>
-                            </div>
+                            {%endif%}
+                            {%endfor%}
                         </div>
-                        {%endif%}
-                        {%endfor%}
                         <!-- END OF Lectures -->
+                        <!-- ASSIGNMENT MAIN -->
+                        <div id="mainassignments" style="display: none;">
+                            {% if account.account.login.category == "PROFESSOR" %}
+                            <div class="row">
+                                <button class="btn btn-success col" style="border-radius: 0; margin-bottom: 20px" type="button" data-toggle="modal" data-target="#addassignment">Add Assignment</button>
+                            </div>
+                            {%endif%}
+                            asdf
+                        </div>
+                        <!-- END OF ASSIGNMENT -->
+                        <!-- QUIZZES MAIN -->
+                        <div id="mainquizzes" style="display: none;">
+                            {% if account.account.login.category == "PROFESSOR" %}
+                            <div class="row">
+                                <button class="btn btn-success col" style="border-radius: 0; margin-bottom: 20px" type="button" data-toggle="modal" data-target="#addquiz">Add Quiz</button>
+                            </div>
+                            {%endif%}
+                            asdfasdf
+                        </div>
+                        <!-- END QUIZZES -->
                     </div>
                     <!-- END OF MATERIALS TAB -->
                 </div>
@@ -458,6 +480,34 @@
             $("#MATERIALS").click(function(e){
                 $("#MIDDLEPOST").css("display", "none")
                 $("#MIDDLEMATERIALS").css("display", "block")
+            })
+        })
+    </script>
+    <script>
+        $(function(){
+            $("#lectures").click(function(e){
+                $("#mainlecture").css("display", "block")
+                $("#mainassignments").css("display", "none")
+                $("#mainquizzes").css("display", "none")
+                $("#lectures").css("background", "rgb(10, 0, 81)")
+                $("#assignments").css("background", "rgb(255,255,255)")
+                $("#quizzes").css("background", "rgb(255,255,255)")
+            })
+            $("#assignments").click(function(e){
+                $("#mainlecture").css("display", "none")
+                $("#mainassignments").css("display", "block")
+                $("#mainquizzes").css("display", "none")
+                $("#lectures").css("background", "rgb(255,255,255)")
+                $("#assignments").css("background", "rgb(70, 22, 97)")
+                $("#quizzes").css("background", "rgb(255,255,255)")
+            })
+            $("#quizzes").click(function(e){
+                $("#mainlecture").css("display", "none")
+                $("#mainassignments").css("display", "none")
+                $("#mainquizzes").css("display", "block")
+                $("#lectures").css("background", "rgb(255,255,255)")
+                $("#assignments").css("background", "rgb(255,255,255)")
+                $("#quizzes").css("background", "rgb(107, 16, 16)")
             })
         })
     </script>
