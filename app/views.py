@@ -585,3 +585,25 @@ def messages(request):
         'messagess': Message.objects.filter(message_to=account)
     }
     return render(request, 'messages.html', context)
+
+
+def messagecontent(request, message_id):
+    email_session = request.session['email']
+    account = Account.objects.select_related().get(login__email=email_session)
+    messagecontent = Message.objects.filter(id=message_id).values()
+    for x in messagecontent:
+        print(x)
+    context={
+        'messagecontent': list(messagecontent)
+    }
+    return JsonResponse(x)
+
+
+def outbox(request):
+    email_session = request.session['email']
+    account = Account.objects.select_related().get(login__email=email_session)
+    context = {
+        'account': Professor.objects.select_related().get(account__login__email=email_session),
+        'messagess': Message.objects.filter(message_from=account)
+    }
+    return render(request, 'outbox.html', context)

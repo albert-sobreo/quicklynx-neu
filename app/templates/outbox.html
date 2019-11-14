@@ -116,7 +116,7 @@
                     <!-- HEADER -->
                     <div class="row border-bottom" style="min-height: 75px; background: rgb(10, 0, 81); color: white">
                         <div class="col">
-                            <h1 style="margin-top: 10px;">Inbox</h1>
+                            <h1 style="margin-top: 10px;">Outbox</h1>
                         </div>
                     </div>
                     <!-- END HEADER -->
@@ -131,7 +131,7 @@
                                 {%endif%}
                             </div>
                             <div class="col-10 border-bottom" style="padding: 0">
-                                <span style="font-weight: 600; margin: 0">{{message.message_from.first_name}} {{message.message_from.last_name}}</span><br>
+                                <span style="font-weight: 600; margin: 0">{{message.message_from.first_name}} {{message.message_from.last_name}} - {{message.message_to.first_name}} {{message.message_to.last_name}}</span><br>
                                 <span style="color: rgb(82, 173, 189)">{{message.subject}}</span><br>
                                 <span style="color: #aaa;">{{message.date|date:"M, j Y g:i a"}}</span>
                             </div>

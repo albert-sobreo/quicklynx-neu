@@ -27,5 +27,7 @@ urlpatterns = [
     path('editaccount/', views.editaccount, name='editaccount'),
     path('download/<file_name>', views.download, name='download'),
     path('addlecture/<str:room_name>', views.addlecture, name='addlecture'),
-    path('message/', views.messages, name='message')
+    path('message/', views.messages, name='message'),
+    path('messagecontent/<int:message_id>', views.messagecontent, name='messagecontent'),
+    path('outbox/', views.outbox, name='outbox')
 ]
