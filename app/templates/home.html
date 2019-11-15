@@ -33,6 +33,9 @@
             transition: 0.1s;
             outline: 0;
         }
+        a{
+            text-decoration: none !important;
+        }
         li a:hover{
             filter: opacity(50%);
         }
@@ -203,7 +206,7 @@
                                             {%endif%}
                                         </div>
                                         <div class="col">
-                                            <span style="font-weight: bold;">{{post.classroom.room_name}}</span>&nbsp;<i class="fas fa-angle-right" style="vertical-align:middle;"></i><span class="small-size">&nbsp;{{post.account}}&nbsp;{{post.date|timesince}} ago</span>
+                                            <span style="font-weight: bold;"><a href="/classroom/{{post.classroom.room_name}}">{{post.classroom.room_name}}</a></span>&nbsp;<i class="fas fa-angle-right" style="vertical-align:middle;"></i><span class="small-size">&nbsp;{{post.account}}&nbsp;{{post.date|timesince}} ago</span>
                                         </div>
                                     </div>
                                     <div class="row">

@@ -1,4 +1,12 @@
 
+html {
+    overflow-y: scroll;
+}
+@media (min-width: 1200px) {
+    body .container{
+        max-width: 1250px;
+    }
+}
 .loginbox{
     border-radius: 5px;
     border: rgb(207, 207, 207) 1px solid;
