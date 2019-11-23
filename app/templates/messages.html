@@ -127,7 +127,7 @@
                         <div class="row message-subject" style="cursor: pointer;" onclick='viewmessage({{message.id}})'>
                             <div class="col-2 border-bottom text-center" style="padding: 0">
                                 {% if message.message_from.propix|length == 0 %}
-                                <img src="https://kerrpanel.com/wp-content/uploads/2018/05/default_avatar-2.gif" height="30px" width="30px">
+                                <img src="../media/pictures/default_avatar-2.gif" height="30px" width="30px">
                                 {% elif message.message_from.propix|length > 0 %}
                                 <img src="{{message.message_from.propix.url}}" height="30px" width="30px">
                                 {%endif%}

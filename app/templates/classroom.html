@@ -214,7 +214,7 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h4 class="modal-title">Edit this classroom</h4>
+                                                <h4 class="modal-title">Edit your name</h4>
                                                 <button class="close" type="button" data-dismiss="modal">&times;</button>
                                             </div>
                                             <div class="modal-body">
@@ -238,7 +238,7 @@
 
                                 </div>
                                 {%if account.account.propix|length == 0 %}
-                                    <img src="https://kerrpanel.com/wp-content/uploads/2018/05/default_avatar-2.gif" alt="" style="object-fit: cover; border-radius: 5px; margin: 0 10px 0" height="50px" width="50px">
+                                    <img src="../media/pictures/default_avatar-2.gif" alt="" style="object-fit: cover; border-radius: 5px; margin: 0 10px 0" height="50px" width="50px">
                                 {%endif%}
                                 {%if account.account.propix|length > 0 %}
                                     <img src="{{account.account.propix.url}}" alt="" style="object-fit: cover; border-radius: 5px; margin: 0 10px 0" height="50px" width="50px">
@@ -276,7 +276,7 @@
                                                 <div class="row">
                                                     <div class="col-1">
                                                         {%if post.account.propix|length == 0 %}
-                                                            <img src="https://kerrpanel.com/wp-content/uploads/2018/05/default_avatar-2.gif" alt="" height="25px" width="25px" style="object-fit: cover; margin: 0; border-radius: 50%;">
+                                                            <img src="../media/pictures/default_avatar-2.gif" alt="" height="25px" width="25px" style="object-fit: cover; margin: 0; border-radius: 50%;">
                                                         {%endif%}
                                                         {%if post.account.propix|length > 0 %}
                                                             <img src="{{post.account.propix.url}}" alt="" height="25px" width="25px" style="object-fit: cover; margin: 0; border-radius: 50%;">
@@ -369,7 +369,7 @@
                                 <button class="btn btn-success col" style="border-radius: 0; margin-bottom: 20px" type="button" data-toggle="modal" data-target="#addassignment">Add Assignment</button>
                             </div>
                             {%endif%}
-                            Under construction
+                            <span class="text-danger"><i class="fas fa-exclamation-triangle text-warning"></i> Under construction</span>
                         </div>
                         <!-- END OF ASSIGNMENT -->
                         <!-- QUIZZES MAIN -->
@@ -379,7 +379,7 @@
                                 <button class="btn btn-success col" style="border-radius: 0; margin-bottom: 20px" type="button" data-toggle="modal" data-target="#addquiz">Add Quiz</button>
                             </div>
                             {%endif%}
-                            Under construction 2
+                            <span class="text-danger"><i class="fas fa-exclamation-triangle text-warning"></i> Under construction 2</span>
                         </div>
                         <!-- END QUIZZES -->
                     </div>
@@ -439,19 +439,23 @@
         function upvote(post_id){
             $.ajax({
                 url: "/upvote/"+post_id,
-                dataType: 'json'
+                dataType: 'json',
+                success: function(){
+                    $("#refreshup"+post_id).load(location.href + " #refreshup"+post_id)
+                    $("#nums"+post_id).load(location.href + " #nums"+post_id)
+                }
             })
-            $("#refreshup"+post_id).load(location.href + " #refreshup"+post_id)
-            $("#nums"+post_id).load(location.href + " #nums"+post_id)
         }
 
         function downvote(post_id){
             $.ajax({
                 url: "/downvote/"+post_id,
-                dataType: 'json'
+                dataType: 'json',
+                success: function(){
+                    $("#refreshdown"+post_id).load(location.href + " #refreshdown"+post_id)
+                    $("#nums"+post_id).load(location.href + " #nums"+post_id)
+                }
             })
-            $("#refreshdown"+post_id).load(location.href + " #refreshdown"+post_id)
-            $("#nums"+post_id).load(location.href + " #nums"+post_id)
         }
     </script>
     <script>

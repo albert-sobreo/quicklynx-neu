@@ -458,21 +458,21 @@ def upvote(request, post_id):
         acct.upvoted_post.remove(post)
         post.upvotes -= 1
         post.save()
-    if category == "STUDENT":
-        context = {
-            'posts': Post.objects.all(),
-            'events': Event.objects.all(),
-            'account': Student.objects.select_related().get(account__login__email=email),
-            'students': Student.objects.all()
-        }
-    elif category == "PROFESSOR":
-        context = {
-            'posts': Post.objects.all(),
-            'events': Event.objects.all(),
-            'account': Professor.objects.select_related().get(account__login__email=email),
-            'students': Student.objects.all()
-        }
-    return JsonResponse(context)
+    # if category == "STUDENT":
+    #     context = {
+    #         'posts': Post.objects.all(),
+    #         'events': Event.objects.all(),
+    #         'account': Student.objects.select_related().get(account__login__email=email),
+    #         'students': Student.objects.all()
+    #     }
+    # elif category == "PROFESSOR":
+    #     context = {
+    #         'posts': Post.objects.all(),
+    #         'events': Event.objects.all(),
+    #         'account': Professor.objects.select_related().get(account__login__email=email),
+    #         'students': Student.objects.all()
+    #     }
+    return JsonResponse({'success': 'true'})
 
 def downvote(request, post_id):
     email = request.session.get('email')
