@@ -346,8 +346,8 @@
                         <!-- ADD LECTURE MODAL END -->
                         <!-- button end -->
                         <!-- LECTURE MAIN -->
+                        {% if lectures|length != 0 %}
                             {%for lecture in lectures|dictsort:"no"%}
-                            {%if classroom|stringformat:"s" == lecture.classroom|stringformat:"s"%}
                             <div class="row border-top border-bottom" onclick="location.href='/download/{{lecture.file_loc|filename}}'" style="cursor: pointer;">
                                 <div class="col-1 border-right aligner ">
                                     <i class="fas fa-book-open" style="color: rgb(164, 211, 207);" class="aligner-item"></i>
@@ -358,8 +358,12 @@
                                     <span style="font-size: .7rem; vertical-align:super; color: #888">{{lecture.file_loc|filename|stringformat:'s'}}</span>
                                 </div>
                             </div>
-                            {%endif%}
                             {%endfor%}
+                        {%else%}
+                            <div class="row border-top border-bottom">
+                                <span class="col">No Lecture</span>
+                            </div>
+                        {%endif%}
                         </div>
                         <!-- END OF Lectures -->
                         <!-- ASSIGNMENT MAIN -->

@@ -286,7 +286,7 @@ def classroom(request, room_name):
             'account': Student.objects.select_related().get(account__login__email=email_session),
             'students': Student.objects.all(),
             'classroom': Classroom.objects.get(room_name=room_name),
-            'lectures': Lecture.objects.all()
+            'lectures': Lecture.objects.select_related().filter(classroom__room_name=room_name)
         }
     elif login.category == "PROFESSOR":
         context = {
@@ -295,7 +295,7 @@ def classroom(request, room_name):
             'account': Professor.objects.select_related().get(account__login__email=email_session),
             'students': Student.objects.all(),
             'classroom': Classroom.objects.get(room_name=room_name),
-            'lectures': Lecture.objects.all()
+            'lectures': Lecture.objects.select_related().filter(classroom__room_name=room_name)
         }
 
     return render(request, 'classroom.html', context)
